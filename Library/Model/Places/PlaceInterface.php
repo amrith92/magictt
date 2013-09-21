@@ -2,11 +2,7 @@
 
 namespace Library\Model\Places;
 
-interface PlaceInterface {
-
-	public function setId($id);
-
-	public function getId();
+interface PlaceInterface extends Identifiable {
 
 	public function setCity($city);
 

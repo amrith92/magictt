@@ -2,11 +2,7 @@
 
 namespace Library\Model\Places;
 
-interface CountryInterface {
-
-	public function setId($id);
-
-	public function getId();
+interface CountryInterface extends Identifiable {
 
 	public function setCountry($country);
 

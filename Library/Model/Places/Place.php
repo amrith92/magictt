@@ -46,10 +46,10 @@ class Place implements PlaceInterface {
 	}
 
 	public function getState() {
-		return new States();
+		return $this->state;
 	}
 	
-	public function setState(\States $state) {
+	public function setState(State $state) {
 		$this->state = $state;
 	}
 
@@ -57,7 +57,7 @@ class Place implements PlaceInterface {
 		return $this->country;	
 	}
 	
-	public function setCountry(\Country $country) {
+	public function setCountry(Country $country) {
 		$this->country = $country; 
 	}
 }

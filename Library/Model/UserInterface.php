@@ -3,10 +3,6 @@
 namespace Library\Model;
 
 interface UserInterface {
-
-	public function getId();
-	
-	public function setId($id);
 	
 	public function getEmail();
 	
