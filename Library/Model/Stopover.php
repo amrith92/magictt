@@ -4,58 +4,51 @@ namespace Library\Model;
 
 class Stopover implements StopoverInterface {
 
-	private $id;
-	private $place;
-	private $duration;
-	private $tours;
-
-	public function __construct(array $fields) {
-		foreach($fields as $field => $value) {
-			$fn = 'set'.\ucfirst($value);
-			$this->$fn($value);			
-		}
-	}
+	protected $allowedFields = [	
+		'id', 'place',
+		'duration', 'tours'
+	];
 
 	public function getId() {
-		return $this->id;	
+		return $this->fields['id'];	
 	}
 
 	public function setId($id) {
-		if (isset($this->id)) {
+		if (isset($this->fields['id'])) {
 			throw new \BadMethodCallException("The ID is already set!");
 		}
 		if (!\is_int($id) || $id < 1) {
 			throw new \InvalidArgumentException("Invalid ID!");
 		}
 		else {
-			$this->id = $id;
+			$this->fields['id'] = $id;
 		}	
 	}
 
 	public function getPlace() {
-		return $this->place;
+		return $this->fields['place'];
 	}
 	
 	public function setPlace(Place $place) {
-		$this->state = $place;
+		$this->fields['state'] = $place;
 	}
 
 	public function getDuration() {
- 		return $this->duration;
+ 		return $this->fields['duration'];
   }
 
 	public function setDuration($duration) {
 		if (!\is_float($duration) || $duration <= 0) {
 			throw new \InvalidArgumentException("Duration cannot be less than 0");		
 		}
-		$this->duration = $duration
+		$this->fields['duration'] = $duration;
 	}
 
 	public function getTours() {
-		return $this->tours;
+		return $this->fields['tours'];
 	}
 
 	public function setTours(array $tours) { 
-		$this->tours = $tours;
+		$this->fields['tours'] = $tours;
 	}
 }

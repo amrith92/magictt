@@ -2,49 +2,37 @@
 
 namespace Library\Model;
 
-class User implements UserInterface {
+class User extends AbstractEntity implements UserInterface {
 
-	private $id;
-	private $email;
-	private $password;
-	private $firstname;
-	private $lastname;
-	private $dob;
-	private $gender;
-	private $lastUpdated;
-	private $created;
-	
-	public function __construct(array $fields) {
-		foreach ($fields as $field => $value) {
-			$fn = 'set' . \ucfirst($field);
-			$this->$fn($value);
-		}
-	}
+	protected $allowedFields = [
+		'id', 'email', 'password', 'firstname','lastname',
+		'dob', 'gender', 'lastUpdated', 'created'
+	];	
 	
 	public function getId() {
-		return $this->id;
+		return $this->fields['id'];
 	}
 	
 	public function setId($id) {
-		if (isset($this->id)) {
+		if (isset($this->fields['id'])) {
 			throw new \BadMethodCallException("The ID is already set!");
 		}
 		if (!\is_int($id) || $id < 1) {
 			throw new \InvalidArgumentException("Invalid ID!");
 		}
 		else {
-			$this->id = $id;
+			$this->fields['id'] = $id;
 		}
 	}
 	
 	public function getEmail() {
-		return $this->email;
+		return $this->fields['email'];
 	}
 	
 	public function setEmail($mail) {
 		
 		if (filter_var($mail, FILTER_VALIDATE_EMAIL)) {
-			$this->email = $mail;
+			$this->fields['email'] = $mail;
 		}
 		else {
 			throw new \InvalidArgumentException("Invalid email id!"); 
@@ -52,13 +40,13 @@ class User implements UserInterface {
 	}
 	
 	public function getPassword() {
-		return $this->password;
+		return $this->fields['password'];
 	}
 	
 	public function setPassword($pwd) {
 		
 		if (\strlen($pwd) > 8) {
-			$this->password = $pwd;
+			$this->fields['password'] = $pwd;
 		}
 		else {
 			throw new \InvalidArgumentException("Password is too short!");
@@ -66,13 +54,13 @@ class User implements UserInterface {
 	}
 	
 	public function getFirstname() {
-		return $this->firstname;
+		return $this->fields['firstname'];
 	}
 	
 	public function setFirstname($fname) {
 		
 		if(\strlen($fname) > 2) {
-			$this->firstname = $fname;
+			$this->fields['firstname'] = $fname;
 		}
 		else {
 			throw new \InvalidArgumentException("Too short for a first name!");
@@ -80,12 +68,12 @@ class User implements UserInterface {
 	}
 	
 	public function getLastname() {
-		return $this->lastname;
+		return $this->fields['lastname'];
 	}
 	
 	public function setLastname($lname) {
 		if (\strlen($lname) > 0) {
-			$this->lastname = $lname;
+			$this->fields['lastname'] = $lname;
 		}
 		else {
 			throw new \InvalidArgumentException("Too short for a last name!");
@@ -93,11 +81,11 @@ class User implements UserInterface {
 	}
 	
 	public function getFullName(){
-		return $this->firstname . " " . $this->lastname;
+		return $this->fields['firstname'] . " " . $this->fields['lastname'];
 	}
 	
 	public function getDob() {
-		return $this->dob;
+		return $this->fields['dob'];
 	}
 	
 	public function setDob(\DateTime $dob) {
@@ -108,12 +96,12 @@ class User implements UserInterface {
 			throw new \InvalidArgumentException("Invalid date of birth!");
 		}
 		
-		$this->dob = $dob;
+		$this->fields['dob'] = $dob;
 	}
 	
 	public function getAge() {
 		$date = new \DateTime();
-		$diff = $date->diff($this->dob);
+		$diff = $date->diff($this->fields['dob']);
 		
 		return $diff->y;
 	}
@@ -129,11 +117,11 @@ class User implements UserInterface {
 			throw new \InvalidArgumentException("Invalid Gender!");
 		}
 		
-		$this->gender = $sex;
+		$this->fields['gender'] = $sex;
 	}
 	
 	public function getLastUpdated() {
-		return $this->lastUpdated;
+		return $this->fields['lastUpdated'];
 	}
 	
 	public function setLastUpdated($last) {
@@ -144,11 +132,11 @@ class User implements UserInterface {
 			throw new \InvalidArgumentException("Invalid Timestamp");
 		}
 		
-		$this->lastUpdated = $last;
+		$this->fields['lastUpdated'] = $last;
 	}
 	
 	public function getCreated() {
-		return $this->created;
+		return $this->fields['created'];
 	}
 	
 	public function setCreated($create) {
@@ -159,7 +147,7 @@ class User implements UserInterface {
 			throw new \InvalidArgumentException("Invalid Timestamp");
 		}
 		
-		$this->created = $create;
+		$this->fields['created'] = $create;
 	}
 }
 
