@@ -4,13 +4,12 @@ namespace Library\Database;
 
 class MysqlAdapter implements DatabaseAdapterInterface {
 
-	private static $hostname = "aesahaettr:3306";
-	private static $username = "muthu";
-	private static $password = "P@ssw0rd2013 !";
-	private static $dbname = "magictt";
+	private $parameters = [];
 	private $conn = null;
 	
-	public function __construct() {
+	public function __construct(array $parameters) {
+		$this->parameters = $parameters;
+
 		$this->connect();
 	}
 	
@@ -20,28 +19,22 @@ class MysqlAdapter implements DatabaseAdapterInterface {
 	
 	public function connect() {
 		if (!$this->conn) {
-			$this->conn = \mysql_connect(self::$hostname, self::$username, self::$password);
+			$this->conn = new \mysqli($this->parameters['hostname'], $this->parameters['username'], $this->parameters['password'], $this->parameters['dbname']);
 		}
 		
-	  if (!$this->conn) {
-	  	throw new \Exception("Connection Unsuccessful! :(");
-	  }
-	  
-	  $select_status = \mysql_select_db(self::$dbname);
-	  
-	  if (!$select_status) {
-	  	throw new \Exception("Database couldn't be selected!");
+	  if ($this->conn->connect_errno) {
+	  	throw new \Exception("Connection Unsuccessful :",$this->conn->connect_error);
 	  }
 	}
 	
 	public function disconnect() {
 		if ($this->conn) {
-			\mysql_close($this->conn);
+			$this->conn->close();
 		}
 	}
 	
 	public function execute($sql) {
-		$result = \mysql_query($sql, $this->conn);
+		$result = $this->conn->query($sql, $this->conn);
 				
 		if (!$result) {
 			throw new \Exception("Invalid query! ");
@@ -49,13 +42,42 @@ class MysqlAdapter implements DatabaseAdapterInterface {
 		
 		$result_array = null;
 		
-		while($row = \mysql_fetch_assoc($result)) {
+		while($row = $result->fetch_assoc()) {
 			$result_array[] = $row;
 		}
 		
-		\mysql_free_result($result);
+		$result->free();
 		
 		return $result_array;
+	}
+
+	public function select($table, array $fields, $where = '1') {		
+		$sql = "SELECT " . \implode(', ', $fields) . " FROM `" . $table . "` WHERE " . $where;
+		return $this->execute($sql);	 
+	}
+
+	public function insert($table, array $fields) {
+		$sql = "INSERT INTO `" . $table . "`(" . \implode(', ',\array_keys($fields)) . " ) VALUES (" . \implode(', ', \array_values($fields)) . " )";
+		return $this->execute($sql);
+	}
+
+	public function update($table, array $value, $where = '') {
+		$values = '';
+		$comma = false; 		
+		foreach($value as $key => $v) {
+			if($comma) {
+				$values .= ',';
+			}
+			$values .= "`$key` = $v";
+			$comma = true;	
+		}
+		$sql = "UPDATE `" . $table . "` SET " . $values . " WHERE " . $where; 
+		return $this->execute($sql);
+	}
+
+	public function delete($table, $where = '') {
+		$sql = "DELETE FROM `" . $table . "` WHERE " . $where;
+		return  $this->execute($sql);
 	}
 }
 
