@@ -4,9 +4,10 @@ namespace Library\Model;
 
 class Tour extends AbstractEntity implements TourInterface {
 
-	 protected $allowedFields = [
+	protected $allowedFields = [
 		'id', 'name', 'description',
-		'pictureUrl', 'price', 'stopovers'
+		'pictureUrl', 'price', 'stopovers', 
+		'category'
 	];
 	
 	public function getId() {
@@ -55,7 +56,7 @@ class Tour extends AbstractEntity implements TourInterface {
   }
 
 	public function setPicture($pictureUrl) {
-			if (filter_var($pictureUrl, FILTER_VALIDATE_URL)) {
+			if (\filter_var($pictureUrl, FILTER_VALIDATE_URL)) {
 			$this->fields['pictureUrl'] = $pictureUrl;
 		}
 		else {
@@ -74,12 +75,23 @@ class Tour extends AbstractEntity implements TourInterface {
 		$this->fields['price'] = $price;
 	}
 
+	public function getCategory() {
+		return $this->fields['category'];
+	}
+	
+	public function setCategory($category) {
+		if ($category == 1 || $category == 2 || $category == 3 ) {
+			$this->fields['category'] = $category;
+		}
+	
+	}
+	
 	public function getStopovers() {
 		return $this->fields['stopovers'];
 	}
 
 	public function setStopovers(array $stopovers) {
-		if(count($stopovers) >= 1) {
+		if(\count($stopovers) >= 1) {
 			$this->fields['stopovers'] = $stopovers;
 		}
 		else { 
@@ -92,17 +104,10 @@ class Tour extends AbstractEntity implements TourInterface {
 	}
 
 	public function removeStopover(Stopover $theStopover) {
-				
-		for ($i = 0, $term = count($this->fields['stopovers']); $i < $term; ++$i) {
-  		if ($this->fields['stopovers'] == $theStopover) {
-				 $index = $i;
+		foreach ($this->fields['stopovers'] as $k => $over)	{
+			if ($over->getId() == $theStopover->getId()) {
+				unset($this->fields['stopovers'][$k]);
 			}
-		}
-		if(isset($index)) {
-			unset($this->fields['stopovers'][$index]);		
-		}	
-		else {
-			throw new \BadMethodCallException("No such stopover to remove!");		
 		}
 	}
 }

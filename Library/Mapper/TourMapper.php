@@ -15,7 +15,8 @@ class TourMapper extends AbstractDataMapper {
 			'description' => $row['description'],
 			'pictureUrl' => $row['pictureUrl'],
 			'price' => $row['price'],
-			'stopovers'=> $row['stopovers']
+			'stopovers'=> $row['stopovers'],
+			'category'=> $row['category']
 		]);	
 	}
 }

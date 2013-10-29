@@ -1,0 +1,33 @@
+/tours:
+
+	1.	If logged in, then create a stragetic view.
+	2.	Else create the most popular tour package view..
+	
+/tours/show/{id}:
+
+	1. Create a detailed view of the tour. 
+	
+/booking/tour/{id}:
+
+	1. Create a view for booking(w.r.t Tour).
+	2. Generate a booking id.
+	
+/booking/confirm/{booking_id}
+
+	1. The total amount is calculated.
+	2. Confirm with the user about the booking by creating a view for the 
+	booking done.
+	3. Update the count of no. of views of the tour.
+
+=======================================================================
+/payment/gateway/{booking_id}:
+
+	1. A view with all the gateways.
+	2. Check if id is valid.
+
+/payment/finish/{booking_id}/{status}:
+
+	1. If status is success then create view for sucessful transaction.
+	2. Else then create view for unsucessful transaction.
+	3. Send email with the booking details.
+
