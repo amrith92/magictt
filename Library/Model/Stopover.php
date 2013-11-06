@@ -2,11 +2,13 @@
 
 namespace Library\Model;
 
+use Library\Model\Places\PlaceInterface;
+
 class Stopover implements StopoverInterface {
 
 	protected $allowedFields = [	
 		'id', 'place',
-		'duration', 'tours'
+		'duration'
 	];
 
 	public function getId() {
@@ -20,17 +22,20 @@ class Stopover implements StopoverInterface {
 		if (!\is_int($id) || $id < 1) {
 			throw new \InvalidArgumentException("Invalid ID!");
 		}
-		else {
-			$this->fields['id'] = $id;
-		}	
+		
+		$this->fields['id'] = $id;
+		
+		return $this;
 	}
 
 	public function getPlace() {
 		return $this->fields['place'];
 	}
 	
-	public function setPlace(Place $place) {
-		$this->fields['state'] = $place;
+	public function setPlace(PlaceInterface $place) {
+		$this->fields['place'] = $place;
+		
+		return $this;
 	}
 
 	public function getDuration() {
@@ -41,14 +46,9 @@ class Stopover implements StopoverInterface {
 		if (!\is_float($duration) || $duration <= 0) {
 			throw new \InvalidArgumentException("Duration cannot be less than 0");		
 		}
+		
 		$this->fields['duration'] = $duration;
-	}
-
-	public function getTours() {
-		return $this->fields['tours'];
-	}
-
-	public function setTours(array $tours) { 
-		$this->fields['tours'] = $tours;
+		
+		return $this;
 	}
 }

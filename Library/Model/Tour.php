@@ -2,12 +2,14 @@
 
 namespace Library\Model;
 
+use Library\Mapper\EntityCollectionInterface;
+
 class Tour extends AbstractEntity implements TourInterface {
 
 	protected $allowedFields = [
 		'id', 'name', 'description',
 		'pictureUrl', 'price', 'stopovers', 
-		'category'
+		'views', 'category'
 	];
 	
 	public function getId() {
@@ -80,17 +82,31 @@ class Tour extends AbstractEntity implements TourInterface {
 	}
 	
 	public function setCategory($category) {
-		if ($category == 1 || $category == 2 || $category == 3 ) {
+		if ($category == 1 || $category == 2 || $category == 3 || $category == 4) {
 			$this->fields['category'] = $category;
 		}
-	
+		else {
+			throw new \InvalidArgumentException("Invalid Category");
+		}
 	}
 	
+	public function getViews() {
+		return $this->fields['category'];
+	}
+	
+	public function setViews($views) {
+		if ($views < 1) {
+			$this->fields['views'] = $views;
+		}
+		else {
+			throw new \InvalidArgumentException("Invalid No. of Views");
+		}
+	}
 	public function getStopovers() {
 		return $this->fields['stopovers'];
 	}
 
-	public function setStopovers(array $stopovers) {
+	public function setStopovers(EntityCollectionInterface $stopovers) {
 		if(\count($stopovers) >= 1) {
 			$this->fields['stopovers'] = $stopovers;
 		}
@@ -99,11 +115,11 @@ class Tour extends AbstractEntity implements TourInterface {
 		}
   }
 
-	public function addStopover(Stopover $theStopover) {
+	public function addStopover(StopoverInterface $theStopover) {
 		$this->fields['stopovers'][] = $theStopover;
 	}
 
-	public function removeStopover(Stopover $theStopover) {
+	public function removeStopover(StopoverInterface $theStopover) {
 		foreach ($this->fields['stopovers'] as $k => $over)	{
 			if ($over->getId() == $theStopover->getId()) {
 				unset($this->fields['stopovers'][$k]);

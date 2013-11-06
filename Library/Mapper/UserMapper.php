@@ -2,6 +2,8 @@
 
 namespace Library\Mapper;
 
+use Library\Model\User;
+
 class UserMapper extends AbstractDataMapper {
 
 	protected $table = "users";
@@ -9,6 +11,7 @@ class UserMapper extends AbstractDataMapper {
 	protected function createEntity(array $row) {
 		return new User([
 			'id' => $row['id'],
+			'email' => $row['email'],
 			'username' => $row['username'],
 			'password' => $row['password'],
 			'firstName' => $row['firstName'],

@@ -2,17 +2,15 @@
 
 namespace Library\Model;
 
+use Library\Model\PlaceInterface;
+
 interface StopoverInterface extends Identifiable{
 	
 	public function getPlace();
 
-	public function setPlace(Place $place);
+	public function setPlace(PlaceInterface $place);
 
 	public function getDuration();
 
 	public function setDuration($duration);
-
-	public function getTours();
-
-	public function setTours(array $tours);
 }

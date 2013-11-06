@@ -2,6 +2,8 @@
 
 namespace Library\Model;
 
+use Library\Mapper\EntityCollectionInterface;
+
 interface TourInterface extends Identifiable{
 	
 	public function getName();
@@ -22,10 +24,18 @@ interface TourInterface extends Identifiable{
 
 	public function getStopovers();
 
-	public function setStopovers(array $stopovers);
+	public function setStopovers(EntityCollectionInterface $stopovers);
 
-	public function addStopover(Stopover $theStopover);
+	public function addStopover(StopoverInterface $theStopover);
 
-	public function removeStopover(Stopover $theStopover);
+	public function removeStopover(StopoverInterface $theStopover);
+	
+	public function setCategory($category);
+	
+	public function getCategory();
+	
+	public function setViews($views);
+	
+	public function getViews();
 
 }

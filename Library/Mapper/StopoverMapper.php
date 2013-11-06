@@ -2,18 +2,30 @@
 
 namespace Library\Mapper;
 
-use Library\Model;
+use Library\Model\Stopover;
 
 class StopoverMapper extends AbstractDataMapper {
 
 	protected $table = "stopover";
+	protected $pkey = "id";
+	protected $placeMapper;
+	
+	public function __construct(DatabaseAdapterInterface $db, EntityCollectionInterface $collection, PlaceMapper $placeMapper)
+	{
+		parent::__construct($db, $collection);
+		
+		$this->placeMapper = $placeMapper;
+	}
 
 	protected function createEntity(array $row) {
+		$placeId = $row['place_id'];
+		
+		$place = $this->placeMapper->findIt($placeId);
+		
 		return new Stopover([
 			'id' => $row['id'],
-			'place' => $row['name'],
-			'duration' => $row['duration'],
-			'tours' => $row['tous']
-		]);	
+			'place' => $place,
+			'duration' => $row['duration']
+		]);
 	}
 }
