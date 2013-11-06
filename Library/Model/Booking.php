@@ -2,6 +2,11 @@
 
 namespace Library\Model;
 
+use Library\Model\UserInterface;
+use Library\Model\TourInterface;
+use Library\Model\TicketInterface;
+use Library\Mapper\EntityCollectionInterface;
+
 class Booking extends AbstractEntity implements BookingInterface
 {
 	protected $allowedFields = [
