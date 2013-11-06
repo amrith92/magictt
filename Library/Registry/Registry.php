@@ -19,7 +19,7 @@ class Registry implements RegistryInterface
 	}
 	
 	public function addService($serviceName, $closure) {
-		if (\array_key_exists($serviceName, $this->service)) {
+		if (\array_key_exists($serviceName, $this->services)) {
 			throw new \BadMethodCallException(\sprintf("Service [%s] already registered.", $serviceName));
 		}
 		

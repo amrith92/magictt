@@ -3,15 +3,13 @@
 namespace Library\Controller;
 
 use \HttpResponse;
-use Library\Session\EncryptedSessionHandler;
-use Library\Session\Session;
-use Library\Encryption\Coder3DES;
+use Library\Configurator\Configurator;
 
 abstract class AbstractController {
-	protected $session;
+	protected $configuration;
 	
 	protected function __construct() {
-		$this->session = new Session(new EncryptedSessionHandler(new Coder3DES));
+		$this->configuration = new Configurator;
 	}
 	
 	public function __destruct() {
@@ -19,7 +17,11 @@ abstract class AbstractController {
 	}
 	
 	public function getSession() {
-		return $this->session;
+		return $this->configuration->getRegistry()->getService('session');
+	}
+	
+	public function getDatabase() {
+		return $this->configuration->getRegistry()->getService('database');
 	}
 	
 	public function renderView($path, array $params = array()) {

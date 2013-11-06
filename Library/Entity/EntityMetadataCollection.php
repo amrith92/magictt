@@ -1,13 +1,9 @@
 <?php
 
-namespace Library\Model\Collection;
+namespace Library\Entity;
 
-use Library\Mapper\EntityCollectionInterface;
-use Library\Model\EntityInterface;
-use \ArrayIterator;
-
-class EntityCollection implements EntityCollectionInterface {
-
+class EntityMetadataCollection implements EntityMetadataCollectionInterface
+{
 	protected $entities = array();
 	
 	public function __construct(array $entities = array()) {
@@ -16,12 +12,12 @@ class EntityCollection implements EntityCollectionInterface {
 		}
 	}
      
-	public function add(EntityInterface $entity) {
-		$this->offsetSet($entity);
+	public function add($key, EntityMetadataInterface $entity) {
+		$this->offsetSet($key, $entity);
 	}
 
-	public function remove(EntityInterface $entity) {
-		$this->offsetUnset($entity);
+	public function remove($key) {
+		$this->offsetUnset($key);
 	}
 
 	public function get($key) {
@@ -36,19 +32,15 @@ class EntityCollection implements EntityCollectionInterface {
 		$this->entities = array();
 	}
 
-	public function toArray() {
-		return $this->entities;
-	}
-
 	public function count() {
 		return count($this->entities);
 	}
 
 	public function offsetSet($key, $value) {
 		$class = new \ReflectionClass($value);
-		if (!$class->implementsInterface('Library\Model\EntityInterface')) {
+		if (!$class->implementsInterface('Library\Entity\EntityMetadataInterface')) {
 			throw new \InvalidArgumentException(
-				"Could not add the user to the collection.");
+				"Could not add the metadata to the collection.");
 		}
 		
 		if (!isset($key)) {
@@ -59,7 +51,7 @@ class EntityCollection implements EntityCollectionInterface {
 	}
 
 	public function offsetUnset($key) {
-		if ($key instanceof EntityInterface) {
+		if ($key instanceof EntityMetadataInterface) {
 			$this->entities = array_filter($this->entities,
 				function ($v) use ($key) {
 					return $v !== $key;
@@ -77,13 +69,12 @@ class EntityCollection implements EntityCollectionInterface {
 	}
 
 	public function offsetExists($key) {
-		return ($key instanceof EntityInterface)
+		return ($key instanceof EntityMetadataInterface)
 			? array_search($key, $this->entities)
 			: isset($this->entities[$key]);
 	}
 
 	public function getIterator() {
-		return new ArrayIterator($this->entities);
+		return new \ArrayIterator($this->entities);
 	}
 }
-

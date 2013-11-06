@@ -66,7 +66,7 @@ class FrontController implements FrontControllerInterface {
 	}
 
 	public function setController($controller) {
-		$controller = "Web\\Controller\\" . ucfirst(strtolower($controller)) . "Controller";
+		$controller = "Library\\Controller\\" . ucfirst(strtolower($controller)) . "Controller";
 		if(!class_exists($controller)) {
 			throw new \InvalidArgumentException("The action controller '$controller' has not been defined.");
 		}

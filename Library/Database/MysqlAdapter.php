@@ -23,7 +23,7 @@ class MysqlAdapter implements DatabaseAdapterInterface {
 		}
 		
 	  if ($this->conn->connect_errno) {
-	  	throw new \Exception("Connection Unsuccessful :",$this->conn->connect_error);
+	  	throw new \Exception("Connection Unsuccessful: " . $this->conn->connect_error);
 	  }
 	}
 	
@@ -34,7 +34,7 @@ class MysqlAdapter implements DatabaseAdapterInterface {
 	}
 	
 	public function execute($sql) {
-		$result = $this->conn->query($sql, $this->conn);
+		$result = $this->conn->query($sql);
 				
 		if (!$result) {
 			throw new \Exception("Invalid query! ");
@@ -52,18 +52,21 @@ class MysqlAdapter implements DatabaseAdapterInterface {
 	}
 
 	public function select($table, array $fields, $where = '1') {		
-		$sql = "SELECT " . \implode(', ', $fields) . " FROM `" . $table . "` WHERE " . $where;
-		return $this->execute($sql);	 
+		$sql = "SELECT " . \implode(', ', $fields) . " FROM `{$table}` WHERE {$where}";
+		
+		return $this->execute($sql);
 	}
 
 	public function insert($table, array $fields) {
 		$sql = "INSERT INTO `" . $table . "`(" . \implode(', ',\array_keys($fields)) . " ) VALUES (" . \implode(', ', \array_values($fields)) . " )";
+		
 		return $this->execute($sql);
 	}
 
 	public function update($table, array $value, $where = '') {
 		$values = '';
-		$comma = false; 		
+		$comma = false;
+			
 		foreach($value as $key => $v) {
 			if($comma) {
 				$values .= ',';
@@ -71,12 +74,15 @@ class MysqlAdapter implements DatabaseAdapterInterface {
 			$values .= "`$key` = $v";
 			$comma = true;	
 		}
+		
 		$sql = "UPDATE `" . $table . "` SET " . $values . " WHERE " . $where; 
+		
 		return $this->execute($sql);
 	}
 
 	public function delete($table, $where = '') {
 		$sql = "DELETE FROM `" . $table . "` WHERE " . $where;
+		
 		return  $this->execute($sql);
 	}
 }
