@@ -1,6 +1,9 @@
 <?php
 
-use Library\Controller;
+namespace Library\Controller;
+
+use Library\Mapper\TourMapper;
+use Library\Model\Repository\TourRepository;
 
 class TourController extends AbstractController {
 
@@ -8,9 +11,7 @@ class TourController extends AbstractController {
 		parent::__construct();
 	}
 	
-	public function index() {
-		if (isset($_SESSION['userId'])) {
-			
-		}
+	public function index()
+	{
 	}
 }
