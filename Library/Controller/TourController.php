@@ -14,6 +14,10 @@ class TourController extends AbstractController {
 			$em = $this->getEntityManager();
 			$tours = $em->getRepository('Tour')->findAll();
 			
+			if (isset()) {
+				$tours = $em->getRepository('Tour')->findPopular();
+				}
+
 			echo '<table border="2" cellpadding="4"><thead><tr><th>ID</th><th>Name</th><th>Description</th></tr></thead><tbody>';
 			foreach ($tours as $tour) {
 				echo "<tr><td>{$tour->getId()}</td><td>{$tour->getName()}</td><td>{$tour->getDescription()}";
