@@ -2,6 +2,9 @@
 
 namespace Library\Controller;
 
+use Library\Strategy\Tour\DefaultTourStrategy;
+use Library\Strategy\Tour\UserTourStrategy;
+
 class TourController extends AbstractController {
 
 	public function __construct() {
@@ -10,27 +13,16 @@ class TourController extends AbstractController {
 	
 	public function index()
 	{
-		try {
-			$em = $this->getEntityManager();
-			$tours = $em->getRepository('Tour')->findAll();
-			
-			echo '<table border="2" cellpadding="4"><thead><tr><th>ID</th><th>Name</th><th>Description</th></tr></thead><tbody>';
-			foreach ($tours as $tour) {
-				echo "<tr><td>{$tour->getId()}</td><td>{$tour->getName()}</td><td>{$tour->getDescription()}";
-				
-				echo "<div><ul>";
-				foreach ($tour->getStopovers() as $stopover) {
-					echo "<li>{$stopover->getPlace()->getName()}, {$stopover->getPlace()->getCountry()->getName()}</li>";
-				}
-				echo "</ul></div>";
-				
-				echo "</td></tr>";
-			}
-			
-			echo '</tbody></table>';
-		} catch (\Exception $e) {
-			echo '<strong>THIS</strong> went wrong: <code>' . $e->getMessage() . '</code>';
-			echo '<pre>' . $e->getTraceAsString() . '</pre>';
+		$tourRepo = $this->getEntityManager()->getRepository('Tour');
+		
+		if (!$this->getSession()->isLoggedIn()) {
+			$strategy = new DefaultTourStrategy($tourRepo);
+		}	else {
+			$strategy = new UserTourStrategy($tourRepo);
 		}
+		
+		$tours = $strategy->findAwesomeTours();
+		
+		$this->renderView('tour/index.php', \compact('tours'));
 	}
 }

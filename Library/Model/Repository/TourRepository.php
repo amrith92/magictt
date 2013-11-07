@@ -51,6 +51,12 @@ class TourRepository implements TourRepositoryInterface
 		
 		return $this->tourMapper->queryEntity($sql);
 	}
+
+	public function findTopTen() {
+		$sql = "SELECT * FROM {$this->tourMapper->getTable()} ORDER BY views DESC LIMIT 0,10";
+
+		return $this->tourMapper->queryEntity($sql);
+	}
 	
 	public function findAll()
 	{
