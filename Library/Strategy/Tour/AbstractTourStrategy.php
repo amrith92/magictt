@@ -13,8 +13,6 @@ abstract class AbstractTourStrategy {
 		$this->tourRepository = $tourRepository;
 	}
 	
-	public abstract function findAwesomeTours() {
-		return	$this->tourRepository->findAll($this->filters);
-	}
+	abstract public function findAwesomeTours();
 }
 

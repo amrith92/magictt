@@ -25,4 +25,18 @@ class TourController extends AbstractController {
 		
 		$this->renderView('tour/index.php', \compact('tours'));
 	}
+	
+	public function show($id) {
+		$tourRepo = $this->getEntityManager()->getRepository('Tour');
+		
+		$tour = $tourRepo->find($id);
+		
+		if ($tour == null) {
+			$this->renderView('404.php');
+			exit();
+		}
+		else {
+			$this->renderView('tour/show.php', \compact('tour'));
+		}
+	}
 }
