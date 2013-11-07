@@ -37,7 +37,7 @@ class MysqlAdapter implements DatabaseAdapterInterface {
 		$result = $this->conn->query($sql);
 				
 		if (!$result) {
-			throw new \Exception("Invalid query! ");
+			throw new \RuntimeException(\sprintf("Query malformed. [%s]", $sql));
 		}
 		
 		$result_array = null;
@@ -51,8 +51,14 @@ class MysqlAdapter implements DatabaseAdapterInterface {
 		return $result_array;
 	}
 
-	public function select($table, array $fields, $where = '1') {		
-		$sql = "SELECT " . \implode(', ', $fields) . " FROM `{$table}` WHERE {$where}";
+	public function select($table, array $fields = [], $where = '1') {
+		if (empty($fields)) {
+			$fields = '*';
+		} else {
+			$fields = \implode(', ', $fields);
+		}
+		
+		$sql = "SELECT {$fields} FROM `{$table}` WHERE {$where}";
 		
 		return $this->execute($sql);
 	}
@@ -63,7 +69,7 @@ class MysqlAdapter implements DatabaseAdapterInterface {
 		return $this->execute($sql);
 	}
 
-	public function update($table, array $value, $where = '') {
+	public function update($table, array $value, $where = '1') {
 		$values = '';
 		$comma = false;
 			
@@ -80,7 +86,7 @@ class MysqlAdapter implements DatabaseAdapterInterface {
 		return $this->execute($sql);
 	}
 
-	public function delete($table, $where = '') {
+	public function delete($table, $where = '1') {
 		$sql = "DELETE FROM `" . $table . "` WHERE " . $where;
 		
 		return  $this->execute($sql);

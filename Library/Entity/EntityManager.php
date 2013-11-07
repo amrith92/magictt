@@ -8,13 +8,13 @@ use Library\Mapper\EntityCollectionInterface;
 class EntityManager implements EntityManagerInterface
 {
 	protected $databaseAdapter;
-	protected $entityCollection;
+	protected $entityCollectionClass;
 	protected $metadataCollection;
 	
-	public function __construct(DatabaseAdapterInterface $databaseAdapter, EntityCollectionInterface $collection)
+	public function __construct(DatabaseAdapterInterface $databaseAdapter, $collectionClass)
 	{
 		$this->databaseAdapter = $databaseAdapter;
-		$this->entityCollection = $collection;
+		$this->entityCollectionClass = $collectionClass;
 		$this->metadataCollection = new EntityMetadataCollection;
 		
 		$this->metadataCollection['Country'] = new EntityMetadata([
@@ -53,17 +53,17 @@ class EntityManager implements EntityManagerInterface
 	
 	protected function resolveMapperDependency($entityName)
 	{
-		if (\array_key_exists($entityName, $this->metadataCollection)) {
+		if (\array_key_exists($entityName, $this->metadataCollection->toArray())) {
 			$em = $this->metadataCollection[$entityName];
 			
 			$klass = $em->getMapperClass();
 			$deps = $em->getMapperDependencies();
 			
-			$params = [$this->databaseAdapter, $this->entityCollection];
+			$params = [$this->databaseAdapter, new $this->entityCollectionClass];
 			
 			if (!empty($deps)) {
 				foreach ($deps as $d) {
-					$obj = $this->resolveMapperDepency($d);
+					$obj = $this->resolveMapperDependency($d);
 					
 					if (null != $obj) {
 						$params[] = $obj;
@@ -71,9 +71,15 @@ class EntityManager implements EntityManagerInterface
 				}
 			}
 			
-			$reflection = new \ReflectionClass($klass);
+			try {
+				$reflection = new \ReflectionClass($klass);
+				
+				$instance = $reflection->newInstanceArgs($params);
+			} catch (\Exception $e) {
+				throw new \RuntimeException($e->getMessage());
+			}
 			
-			return $reflecton->newInstanceArgs($params);
+			return $instance;
 		} else {
 			return null;
 		}
@@ -81,9 +87,7 @@ class EntityManager implements EntityManagerInterface
 	
 	public function getRepository($entityName)
 	{
-		if (\array_key_exists($entityName, $this->metadataCollection)) {
-			$this->entityCollection->clear();
-			
+		if (\array_key_exists($entityName, $this->metadataCollection->toArray())) {
 			$em = $this->metadataCollection[$entityName];
 			
 			$repo = $em->getRepositoryClass();
@@ -91,20 +95,18 @@ class EntityManager implements EntityManagerInterface
 			
 			return new $repo($mapper);
 		} else {
-			throw new \RuntimeException(\sprintf("Entity [%s] could not be resolved."));
+			throw new \RuntimeException(\sprintf("Entity [%s] could not be resolved.", $entityName));
 		}
 	}
 	
 	public function getMapper($entityName)
 	{
-		if (\array_key_exists($entityName, $this->metadataCollection)) {
-			$this->entityCollection->clear();
-			
+		if (\array_key_exists($entityName, $this->metadataCollection->toArray())) {
 			$mapper = $this->resolveMapperDependency($entityName);
 			
 			return $mapper;
 		} else {
-			throw new \RuntimeException(\sprintf("Entity [%s] could not be resolved."));
+			throw new \RuntimeException(\sprintf("Entity [%s] could not be resolved.", $entityName));
 		}
 	}
 }

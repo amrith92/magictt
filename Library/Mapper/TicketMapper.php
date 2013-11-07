@@ -8,7 +8,7 @@ class TicketMapper extends AbstractDataMapper
 {
 	protected $table = 'ticket';
 	
-	protected function createEntity(array $row) {
+	protected function createEntity($row) {
 		return new Ticket([
 			'id' => $row['id'],
 			'name' => $row['name'],

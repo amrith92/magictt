@@ -20,5 +20,7 @@ interface TourRepositoryInterface
 	
 	public function findPassingThrough(array $stopovers);
 	
+	public function findAll();
+	
 	public function save(TourInterface $tour);
 }

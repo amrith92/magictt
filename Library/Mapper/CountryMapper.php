@@ -10,14 +10,14 @@ class CountryMapper extends AbstractDataMapper {
 	protected $table = "Country";
 	protected $pkey = "Code";
 
-	protected function createEntity(array $row) {
-		$rows = $this->query("SELECT * FROM CountryLanguage WHERE CountryCode = {$row['Code']}");
+	protected function createEntity($row) {
+		$rows = $this->query("SELECT * FROM CountryLanguage WHERE CountryCode = '{$row['Code']}'");
 		
-		foreach ($rows as $row) {
-			$languages = new Language([
-				'language' => $row['Language'],
-				'isOfficial' => $row['IsOfficial'],
-				'percentage' => $row['Percentage']
+		foreach ($rows as $_row) {
+			$languages[] = new Language([
+				'language' => $_row['Language'],
+				'isOfficial' => ($_row['IsOfficial'] == 'T') ? true : false,
+				'percentage' => $_row['Percentage']
 			]);
 		}
 		

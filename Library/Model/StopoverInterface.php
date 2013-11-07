@@ -2,8 +2,6 @@
 
 namespace Library\Model;
 
-use Library\Model\PlaceInterface;
-
 interface StopoverInterface extends Identifiable{
 	
 	public function getPlace();

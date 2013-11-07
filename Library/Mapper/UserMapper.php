@@ -8,7 +8,7 @@ class UserMapper extends AbstractDataMapper {
 
 	protected $table = "users";
 
-	protected function createEntity(array $row) {
+	protected function createEntity($row) {
 		return new User([
 			'id' => $row['id'],
 			'email' => $row['email'],

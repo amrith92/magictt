@@ -8,7 +8,6 @@ use Library\Session\EncryptedSessionHandler;
 use Library\Session\Session;
 use Library\Encryption\Coder3DES;
 use Library\Entity\EntityManager;
-use Library\Model\Collection\EntityCollection;
 
 class Configurator
 {
@@ -33,7 +32,7 @@ class Configurator
 		});
 		
 		self::$registry->addService('entity.manager', function() {
-			$em = new EntityManager(self::$registry->getService('database'), new EntityCollection);
+			return new EntityManager(self::$registry->getService('database'), 'Library\\Model\\Collection\\EntityCollection');
 		});
 	}
 	

@@ -46,9 +46,9 @@ class EntityCollection implements EntityCollectionInterface {
 
 	public function offsetSet($key, $value) {
 		$class = new \ReflectionClass($value);
-		if (!$class->implementsInterface('Library\Model\EntityInterface')) {
+		if (!$class->implementsInterface('Library\\Model\\EntityInterface')) {
 			throw new \InvalidArgumentException(
-				"Could not add the user to the collection.");
+				"Could not add the entity to the collection.");
 		}
 		
 		if (!isset($key)) {

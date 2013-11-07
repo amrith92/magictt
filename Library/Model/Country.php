@@ -26,7 +26,7 @@ class Country extends AbstractEntity implements CountryInterface
 			throw new \BadMethodCallException("Country code already set!");
 		}
 		
-		if (\strlen($this->fields['Code']) > 3) {
+		if (\strlen($code) > 3) {
 			throw new \InvalidArgumentException("Country code cannot be longer than three characters!");
 		}
 		

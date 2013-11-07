@@ -13,4 +13,6 @@ interface EntityMetadataCollectionInterface extends \Countable, \ArrayAccess, \I
 	public function exists($key);
 	
 	public function clear();
+	
+	public function toArray();
 }

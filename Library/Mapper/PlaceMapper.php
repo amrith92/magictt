@@ -2,6 +2,7 @@
 
 namespace Library\Mapper;
 
+use Library\Database\DatabaseAdapterInterface;
 use Library\Model\Place;
 
 class PlaceMapper extends AbstractDataMapper {
@@ -16,7 +17,7 @@ class PlaceMapper extends AbstractDataMapper {
 		$this->countryMapper = $countryMapper;
 	}
 
-	protected function createEntity(array $row) {
+	protected function createEntity($row) {
 		$countryId = $row['Country'];
 		$country = $this->countryMapper->findIt($countryId);
 		

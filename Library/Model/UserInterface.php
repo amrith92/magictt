@@ -12,19 +12,19 @@ interface UserInterface {
 	
 	public function setPassword($pwd);
 	
-	public function getFirstname();
+	public function getFirstName();
 	
-	public function setFirstname($fname);
+	public function setFirstName($fname);
 	
-	public function getLastname();
+	public function getLastName();
 	
-	public function setLastname($lname);
+	public function setLastName($lname);
 	
-	public function getFullname();
+	public function getFullName();
 	
 	public function getDob();
 	
-	public function setDob(\DateTime $dob);
+	public function setDob($dob);
 	
 	public function getAge();
 	

@@ -17,12 +17,16 @@ class Place extends AbstractEntity implements PlaceInterface {
 		if (isset($this->fields['Id'])) {
 			throw new \BadMethodCallException("The ID is already set!");
 		}
+		
+		$id = (int) $id;
+		
 		if (!\is_int($id) || $id < 1) {
 			throw new \InvalidArgumentException("Invalid ID!");
 		}
-		else {
-			$this->fields['Id'] = $id;
-		}	
+		
+		$this->fields['Id'] = $id;
+		
+		return $this;
 	}
 
 	public function setName($name) {

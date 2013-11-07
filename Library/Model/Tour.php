@@ -8,9 +8,11 @@ class Tour extends AbstractEntity implements TourInterface {
 
 	protected $allowedFields = [
 		'id', 'name', 'description',
-		'pictureUrl', 'price', 'stopovers', 
+		'pictureUrl', 'price', 
 		'views', 'category'
 	];
+	
+	protected $stopovers;
 	
 	public function getId() {
 		return $this->fields['id'];	
@@ -20,12 +22,16 @@ class Tour extends AbstractEntity implements TourInterface {
 		if (isset($this->fields['id'])) {
 			throw new \BadMethodCallException("The ID is already set!");
 		}
+		
+		$id = (int) $id;
+		
 		if (!\is_int($id) || $id < 1) {
 			throw new \InvalidArgumentException("Invalid ID!");
 		}
-		else {
-			$this->fields['id'] = $id;
-		}	
+		
+		$this->fields['id'] = $id;
+		
+		return $this;
 	}		
 	
 	public function getName() { 
@@ -33,96 +39,107 @@ class Tour extends AbstractEntity implements TourInterface {
 	}
 
 	public function setName($name) {
- 		if(\strlen($name) > 2) {
-			$this->fields['name'] = $name;
-		}
-		else {
+ 		if(\strlen($name) < 2) {
 			throw new \InvalidArgumentException("Too short for a name!");
 		}
+		
+		$this->fields['name'] = $name;
+		
+		return $this;
   }
+  
 	public function getDescription() {
 		return $this->fields['description'];
 	}
 
 	public function setDescription($desc) {
-		if(\strlen($desc) > 15) {
-			$this->fields['description'] = $desc;
-		}
-		else {
+		if(\strlen($desc) < 15) {
 			throw new \InvalidArgumentException("Too short for a description!");
 		}
+		
+		$this->fields['description'] = $desc;
+		
+		return $this;
 	}
-
-	public function getPicture() {
-		return $this->fields['pictureUrl'] = $pictureUrl;
-  }
 
 	public function setPicture($pictureUrl) {
-			if (\filter_var($pictureUrl, FILTER_VALIDATE_URL)) {
-			$this->fields['pictureUrl'] = $pictureUrl;
+		if (!\filter_var($pictureUrl, FILTER_VALIDATE_URL)) {
+			throw new \InvalidArgumentException("Invalid picture url!");
 		}
-		else {
-			throw new \InvalidArgumentException("Invalid picture url!"); 
-		}
+		
+		$this->fields['pictureUrl'] = $pictureUrl;
+		
+		return $this;
 	}
-
-	public function getPrice() {
-		return $this->fields['price'];	
-	}
+	
+	public function getPicture() {
+		return $this->fields['pictureUrl'];
+  }
 
 	public function setPrice($price) {
 		if (!\is_float($price) || $price <= 0) {
 			throw new \InvalidArgumentException("Price cannot be less than 0");		
 		}
+		
 		$this->fields['price'] = $price;
+		
+		return $this;
 	}
-
+	
+	public function getPrice() {
+		return $this->fields['price'];	
+	}
+	
+	public function setCategory($category) {
+		if ($category < 0 || $category > 4) {
+			throw new \InvalidArgumentException("Invalid Category");
+		}
+		
+		$this->fields['category'] = $category;
+		
+		return $this;
+	}
+	
 	public function getCategory() {
 		return $this->fields['category'];
 	}
 	
-	public function setCategory($category) {
-		if ($category == 1 || $category == 2 || $category == 3 || $category == 4) {
-			$this->fields['category'] = $category;
+	public function setViews($views) {
+		if ($views < 0) {
+			throw new \InvalidArgumentException("Invalid No. of Views");
 		}
-		else {
-			throw new \InvalidArgumentException("Invalid Category");
-		}
+		
+		$this->fields['views'] = $views;
+		
+		return $this;
 	}
 	
 	public function getViews() {
-		return $this->fields['category'];
-	}
-	
-	public function setViews($views) {
-		if ($views < 1) {
-			$this->fields['views'] = $views;
-		}
-		else {
-			throw new \InvalidArgumentException("Invalid No. of Views");
-		}
-	}
-	public function getStopovers() {
-		return $this->fields['stopovers'];
+		return $this->fields['views'];
 	}
 
 	public function setStopovers(EntityCollectionInterface $stopovers) {
-		if(\count($stopovers) >= 1) {
-			$this->fields['stopovers'] = $stopovers;
-		}
-		else { 
+		if(\count($stopovers) < 1) {
 			throw new \InvalidArgumentException("Minimum one stopover should be there!");
 		}
+		
+		$this->stopovers = $stopovers;
+		
+		return $this;
   }
+  
+  public function getStopovers() {
+		return $this->stopovers;
+	}
 
 	public function addStopover(StopoverInterface $theStopover) {
-		$this->fields['stopovers'][] = $theStopover;
+		$this->stopovers[] = $theStopover;
 	}
 
 	public function removeStopover(StopoverInterface $theStopover) {
-		foreach ($this->fields['stopovers'] as $k => $over)	{
+		foreach ($this->stopovers as $k => $over)	{
 			if ($over->getId() == $theStopover->getId()) {
-				unset($this->fields['stopovers'][$k]);
+				unset($this->stopovers[$k]);
 			}
 		}
 	}

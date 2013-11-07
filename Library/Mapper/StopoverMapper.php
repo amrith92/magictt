@@ -2,6 +2,7 @@
 
 namespace Library\Mapper;
 
+use Library\Database\DatabaseAdapterInterface;
 use Library\Model\Stopover;
 
 class StopoverMapper extends AbstractDataMapper {
@@ -17,15 +18,15 @@ class StopoverMapper extends AbstractDataMapper {
 		$this->placeMapper = $placeMapper;
 	}
 
-	protected function createEntity(array $row) {
-		$placeId = $row['place_id'];
+	protected function createEntity($row) {
+		$placeId = $row['place'];
 		
 		$place = $this->placeMapper->findIt($placeId);
 		
 		return new Stopover([
 			'id' => $row['id'],
 			'place' => $place,
-			'duration' => $row['duration']
+			'duration' => (null != $row['duration']) ? $row['duration'] : 0
 		]);
 	}
 }

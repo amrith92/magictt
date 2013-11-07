@@ -2,6 +2,7 @@
 
 namespace Library\Mapper;
 
+use Library\Database\DatabaseAdapterInterface;
 use Library\Model\Booking;
 
 class BookingMapper extends AbstractDataMapper

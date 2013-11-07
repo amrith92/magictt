@@ -31,6 +31,10 @@ class EntityMetadataCollection implements EntityMetadataCollectionInterface
 	public function clear() {
 		$this->entities = array();
 	}
+	
+	public function toArray() {
+		return $this->entities;
+	}
 
 	public function count() {
 		return count($this->entities);
@@ -38,7 +42,7 @@ class EntityMetadataCollection implements EntityMetadataCollectionInterface
 
 	public function offsetSet($key, $value) {
 		$class = new \ReflectionClass($value);
-		if (!$class->implementsInterface('Library\Entity\EntityMetadataInterface')) {
+		if (!$class->implementsInterface('Library\\Entity\\EntityMetadataInterface')) {
 			throw new \InvalidArgumentException(
 				"Could not add the metadata to the collection.");
 		}
@@ -52,7 +56,7 @@ class EntityMetadataCollection implements EntityMetadataCollectionInterface
 
 	public function offsetUnset($key) {
 		if ($key instanceof EntityMetadataInterface) {
-			$this->entities = array_filter($this->entities,
+			$this->entities = \array_filter($this->entities,
 				function ($v) use ($key) {
 					return $v !== $key;
 				}
@@ -70,7 +74,7 @@ class EntityMetadataCollection implements EntityMetadataCollectionInterface
 
 	public function offsetExists($key) {
 		return ($key instanceof EntityMetadataInterface)
-			? array_search($key, $this->entities)
+			? \array_search($key, $this->entities)
 			: isset($this->entities[$key]);
 	}
 

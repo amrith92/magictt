@@ -2,9 +2,9 @@
 
 namespace Library\Model;
 
-use Library\Model\Places\PlaceInterface;
+use Library\Model\PlaceInterface;
 
-class Stopover implements StopoverInterface {
+class Stopover extends AbstractEntity implements StopoverInterface {
 
 	protected $allowedFields = [	
 		'id', 'place',
@@ -19,6 +19,9 @@ class Stopover implements StopoverInterface {
 		if (isset($this->fields['id'])) {
 			throw new \BadMethodCallException("The ID is already set!");
 		}
+		
+		$id = (int) $id;
+		
 		if (!\is_int($id) || $id < 1) {
 			throw new \InvalidArgumentException("Invalid ID!");
 		}
@@ -43,6 +46,8 @@ class Stopover implements StopoverInterface {
   }
 
 	public function setDuration($duration) {
+		$duration = (float) $duration;
+		
 		if (!\is_float($duration) || $duration <= 0) {
 			throw new \InvalidArgumentException("Duration cannot be less than 0");		
 		}

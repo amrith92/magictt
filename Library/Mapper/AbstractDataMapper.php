@@ -2,12 +2,15 @@
 
 namespace Library\Mapper;
 
-class AbstractDataMapper implements DataMapperInterface {
+use Library\Database\DatabaseAdapterInterface;
+use Library\Model\EntityInterface;
 
-	private $db;
-	private $table;
-	private $pkey = 'id';
-	private $collection;
+abstract class AbstractDataMapper implements DataMapperInterface
+{
+	protected $db;
+	protected $table;
+	protected $pkey = 'id';
+	protected $collection;
 
 	public function __construct(DatabaseAdapterInterface $db, EntityCollectionInterface $collection, $table = null) {
 		$this->db = $db;
@@ -53,24 +56,37 @@ class AbstractDataMapper implements DataMapperInterface {
 	}
 
 	public function findIt($id) {
-		$row =	$this->db->execute("SELECT * FROM " . $this->table . " WHERE {$this->pkey} = $id ");
-		if($row != null) {
-			return null;		
+		if (0 == (int) $id) {
+			$id = "'$id'";
 		}
-		return $this->createEntity($row);
+		
+		$sql = "SELECT * FROM {$this->table} WHERE {$this->pkey} = $id";
+		
+		$row =	$this->db->execute($sql);
+		
+		if (null == $row || \count($row) < 1) {
+			throw new \RuntimeException(\sprintf("Query failed.<br /><pre>%s</pre>", $sql));
+		}
+		
+		return $this->createEntity($row[0]);
  	}
 
 	public function findAll(array $conditions = []) {
-		$values = '';
-		$comma = false; 		
-		foreach($conditions as $key => $v) {
-			if($comma) {
-				$values .= ',';
+		if (!empty($conditions)) {
+			$values = '';
+			$comma = false; 		
+			foreach($conditions as $key => $v) {
+				if($comma) {
+					$values .= ',';
+				}
+				$values .= "`$key` = $v";
+				$comma = true;	
 			}
-			$values .= "`$key` = $v";
-			$comma = true;	
-		}	
-		$rows = $this->db->execute("SELECT * FROM " . $this->table . " WHERE " . $values);
+		} else {
+			$values = '1';
+		}
+		
+		$rows = $this->db->select($this->table);
 		
 		return $this->createCollection($rows);
 	}
@@ -80,7 +96,9 @@ class AbstractDataMapper implements DataMapperInterface {
 		$predicate .= \implode(', ', $ids);
 		$predicate .= ')';
 		
-		$rows = $this->db->execute("SELECT * FROM {$this->table} WHERE {$this->pkey} IN {$predicate}");
+		$sql = "SELECT * FROM {$this->table} WHERE {$this->pkey} IN {$predicate}";
+		
+		$rows = $this->db->execute($sql);
 		
 		return $this->createCollection($rows);
 	}
@@ -104,13 +122,14 @@ class AbstractDataMapper implements DataMapperInterface {
 	}
 	
 	protected function createCollection(array $rows) {
-		$this->collection->clear();
+		$collection = clone($this->collection);
+		$collection->clear();
 		
 		foreach ($rows as $row) {
-			$this->collection[] = $this->createEntity($row);
+			$collection[] = $this->createEntity($row);
 		}
 		
-		return $this->collection;
+		return $collection;
 	}
 	
 	abstract protected function createEntity($row); 

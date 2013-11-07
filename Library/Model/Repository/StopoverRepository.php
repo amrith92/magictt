@@ -3,6 +3,8 @@
 namespace Library\Model\Repository;
 
 use Library\Mapper\StopoverMapper;
+use Library\Model\StopoverInterface;
+use Library\Model\PlaceInterface;
 
 class StopoverRepository implements StopoverRepositoryInterface
 {

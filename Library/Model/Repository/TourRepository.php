@@ -52,6 +52,11 @@ class TourRepository implements TourRepositoryInterface
 		return $this->tourMapper->queryEntity($sql);
 	}
 	
+	public function findAll()
+	{
+		return $this->tourMapper->findAll();
+	}
+	
 	public function save(TourInterface $tour) {
 		return $this->tourMapper->save($tour);
 	}

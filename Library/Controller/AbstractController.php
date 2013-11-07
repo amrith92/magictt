@@ -24,6 +24,10 @@ abstract class AbstractController {
 		return $this->configuration->getRegistry()->getService('database');
 	}
 	
+	public function getEntityManager() {
+		return $this->configuration->getRegistry()->getService('entity.manager');
+	}
+	
 	public function renderView($path, array $params = array()) {
 		$path = ROOT . DIRECTORY_SEPARATOR . 'ui' . DIRECTORY_SEPARATOR . $path;
 		

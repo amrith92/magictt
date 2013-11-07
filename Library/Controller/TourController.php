@@ -11,9 +11,23 @@ class TourController extends AbstractController {
 	public function index()
 	{
 		try {
-			$db = $this->getDatabase();
+			$em = $this->getEntityManager();
+			$tours = $em->getRepository('Tour')->findAll();
 			
-			echo '<pre>' . \var_export($db->select('tour', ['id']), true) . '</pre>';
+			echo '<table border="2" cellpadding="4"><thead><tr><th>ID</th><th>Name</th><th>Description</th></tr></thead><tbody>';
+			foreach ($tours as $tour) {
+				echo "<tr><td>{$tour->getId()}</td><td>{$tour->getName()}</td><td>{$tour->getDescription()}";
+				
+				echo "<div><ul>";
+				foreach ($tour->getStopovers() as $stopover) {
+					echo "<li>{$stopover->getPlace()->getName()}, {$stopover->getPlace()->getCountry()->getName()}</li>";
+				}
+				echo "</ul></div>";
+				
+				echo "</td></tr>";
+			}
+			
+			echo '</tbody></table>';
 		} catch (\Exception $e) {
 			echo '<strong>THIS</strong> went wrong: <code>' . $e->getMessage() . '</code>';
 			echo '<pre>' . $e->getTraceAsString() . '</pre>';

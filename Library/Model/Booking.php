@@ -64,7 +64,7 @@ class Booking extends AbstractEntity implements BookingInterface
 			
 			$warnings = \DateTime::getLastErrors();
 			
-			if ($warnings->warning_count > 0 || $warnings->error_count > 0) {
+			if ($warnings['warning_count'] > 0 || $warnings['error_count'] > 0) {
 				throw new \InvalidArgumentException("Date must be in the format YYYY-MM-DD.");
 			}
 			
@@ -86,7 +86,7 @@ class Booking extends AbstractEntity implements BookingInterface
 			
 			$warnings = \DateTime::getLastErrors();
 			
-			if ($warnings->warning_count > 0 || $warnings->error_count > 0) {
+			if ($warnings['warning_count'] > 0 || $warnings['error_count'] > 0) {
 				throw new \InvalidArgumentException("Date must be in the format YYYY-MM-DD.");
 			}
 			
