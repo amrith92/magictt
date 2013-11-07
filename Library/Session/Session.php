@@ -99,5 +99,9 @@ class Session implements SessionInterface {
 	public function valid() {
 		return \key($_SESSION) !== null;
 	}
+	
+	public function isLoggedIn() {
+		return isset($_SESSION['logged_in']);
+	}
 }
 

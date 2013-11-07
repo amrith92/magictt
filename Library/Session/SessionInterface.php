@@ -19,4 +19,6 @@ interface SessionInterface extends \ArrayAccess, \Iterator
 	public function remove($key);
 	
 	public function get($key);
+	
+	public function isLoggedIn();
 }
