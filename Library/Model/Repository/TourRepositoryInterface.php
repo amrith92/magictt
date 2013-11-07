@@ -19,6 +19,8 @@ interface TourRepositoryInterface
 	public function findPopular($treshhold);
 	
 	public function findPassingThrough(array $stopovers);
+
+	public function findTopTen();
 	
 	public function findAll();
 	
