@@ -8,6 +8,7 @@ use Library\Session\EncryptedSessionHandler;
 use Library\Session\Session;
 use Library\Encryption\Coder3DES;
 use Library\Entity\EntityManager;
+use Library\Email\Mailer;
 
 class Configurator
 {
@@ -33,6 +34,10 @@ class Configurator
 		
 		self::$registry->addService('entity.manager', function() {
 			return new EntityManager(self::$registry->getService('database'), 'Library\\Model\\Collection\\EntityCollection');
+		});
+		
+		self::registry->addService('email', function() {
+			return new Mailer();
 		});
 	}
 	
