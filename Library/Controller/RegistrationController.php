@@ -9,7 +9,7 @@ class RegistrationController extends AbstractController {
 	}
 	
 	public function index() {	
-		$this->renderView('registration.php'));
+		$this->renderView('registration/index.php');
 	}
 	
 	public function submit() {
