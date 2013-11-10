@@ -60,6 +60,15 @@ class UnitOfWork implements UnitOfWorkInterface {
 		return $this;
 	}
 	
+	public function registerCleanCollection(EntityCollectionInterface $collection)
+	{
+		foreach ($collection as $entity) {
+			$this->registerEntity($entity, self::STATE_CLEAN);
+		}
+		
+		return $this;
+	}
+	
 	protected function registerEntity(EntityInterface $entity, $state = self::STATE_CLEAN) {
 		$this->storage->attach($entity, $state);
 	}

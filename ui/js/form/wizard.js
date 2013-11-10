@@ -7,6 +7,12 @@ define(['./util', './validate'], function(util, validate) {
 			next: document.getElementById('next-step')
 		},
 		
+		data: {
+			age: undefined,
+			married: undefined,
+			kids: undefined
+		},
+		
 		setup: function() {
 			var self = this;
 			
@@ -31,6 +37,21 @@ define(['./util', './validate'], function(util, validate) {
 			});
 		},
 		
+		send: function() {
+			var l = window.location;
+			var str = l.protocol + "//" + l.hostname + "/tour?age=" + this.data.age;
+			
+			if (undefined != this.data.married) {
+				str += "&married=" + this.data.married;
+			}
+			
+			if (undefined != this.data.kids) {
+				str += "&kids=" + this.data.kids;
+			}
+			
+			window.location.href = str;
+		},
+		
 		next: function(e, ctrl) {
 			e.preventDefault();
 				
@@ -41,15 +62,27 @@ define(['./util', './validate'], function(util, validate) {
 				self.fields.age.parentNode.parentNode.classList.add('hidden');
 				self.fields.maritalStatus.parentNode.parentNode.classList.remove('hidden');
 				ctrl.setAttribute('data-step', 'marital-status');
+				self.data.age = self.fields.age.value;
 			} else if ('marital-status' == step) {
 				self.fields.maritalStatus.parentNode.parentNode.classList.add('hidden');
 				
 				if (self.fields.maritalStatus.value == 'Yes') {
 					self.fields.kids.parentNode.parentNode.classList.remove('hidden');
 					ctrl.setAttribute('data-step', 'kids');
+					self.data.married = 'Yes';
 				} else {
-					alert('Done!');
+					self.data.married = 'No';
+					self.send();
 				}
+			} else if ('kids' == step) {
+				self.fields.maritalStatus.parentNode.parentNode.classList.add('hidden');
+				if (self.fields.kids.value == 'Yes') {
+					self.data.kids = 'Yes';
+				} else {
+					self.data.kids = 'No';
+				}
+				
+				self.send();
 			}
 		}
 	};

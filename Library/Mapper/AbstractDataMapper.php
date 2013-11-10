@@ -86,7 +86,9 @@ abstract class AbstractDataMapper implements DataMapperInterface
 			$values = '1';
 		}
 		
-		$rows = $this->db->select($this->table);
+		$sql = "SELECT * FROM {$this->table} WHERE {$values}";
+		
+		$rows = $this->db->execute($sql);
 		
 		return $this->createCollection($rows);
 	}

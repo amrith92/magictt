@@ -15,10 +15,24 @@ class TourController extends AbstractController {
 	{
 		$tourRepo = $this->getEntityManager()->getRepository('Tour');
 		
-		if (!$this->getSession()->isLoggedIn()) {
+		if (!$this->getSession()->isLoggedIn() && !isset($_GET['age'])) {
 			$strategy = new DefaultTourStrategy($tourRepo);
 		}	else {
-			$strategy = new UserTourStrategy($tourRepo);
+			$params = [];
+			
+			if (isset($_GET['age'])) {
+				$params['age'] = \filter_var($_GET['age'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			}
+			
+			if (isset($_GET['married'])) {
+				$params['married'] = \filter_var($_GET['married'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			}
+			
+			if (isset($_GET['kids'])) {
+				$params['kids'] = \filter_var($_GET['kids'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			}
+			
+			$strategy = new UserTourStrategy($tourRepo, $params);
 		}
 		
 		$tours = $strategy->findAwesomeTours();
@@ -35,8 +49,7 @@ class TourController extends AbstractController {
 			$this->renderView('404.php');
 			exit();
 		}
-		else {
-			$this->renderView('tour/show.php', \compact('tour'));
-		}
+		
+		$this->renderView('tour/show.php', \compact('tour'));
 	}
 }

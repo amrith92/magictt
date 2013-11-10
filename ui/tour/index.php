@@ -34,13 +34,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="#"><img src="<?php echo UI_PATH; ?>/img/logo.png" title="Magic Tours and Travels" height="20" /> Magic</a>
+              <a class="navbar-brand" href="#"><img src="<?php echo UI_PATH; ?>/img/logo.png" title="Magic Tours and Travels" height="20" /> Magic Tours</a>
             </div>
             <div class="navbar-collapse collapse">
               <ul class="nav navbar-nav pull-right">
                 <li><a href="/">Home</a></li>
                 <li class="active"><a href="#about">Packages</a></li>
-                <li><a href="#contact">Personalised Packages</a></li>
                 <li><a href="#trendy-package">Trendy Packages</a></li>
                 <li><a href="#popula-packages">Popular packages</a></li>
               </ul>
@@ -52,22 +51,32 @@
     </div>
     
     <div class="container">
-    	<table class="table">
-    		<thead>
-    			<tr>
-    				<th>ID</th>
-    				<th>Name</th>
-    				<th>Description</th>
-    			</tr>
-    		</thead>
-    		<tbody>
-    			<?php
-    				foreach ($tours as $tour) {
-    					echo "<tr><td>{$tour->getId()}</td><td>{$tour->getName()}</td><td>{$tour->getDescription()}</td></tr>";
-    				}
-    			?>
-    		</tbody>
-    	</table>
+    	<div class="row">
+    	<?php
+    		$count = \count($tours);
+    		$ctr = 0;
+    		
+    		foreach ($tours as $tour) {
+    	?>
+    		<div class="col-sm-6 col-md-4">
+					<div class="thumbnail">
+						<img src="<?php echo $tour->getPicture(); ?>" alt="<?php echo $tour->getName(); ?>">
+						<div class="caption">
+						  <h3><?php echo $tour->getName(); ?></h3>
+						  <p><?php echo $tour->getDescription(); ?></p>
+						  <p><a href="/tour/show/<?php echo $tour->getId(); ?>" class="btn btn-primary" role="button">Find Out More!</a></p>
+						</div>
+					</div>
+				</div>
+			<?php
+					++$ctr;
+				
+					if (0 == ($ctr % 3)) {
+						echo '</div><div class="row">';
+					}
+				}
+			?>
+			</div>
     </div>
 
       <!-- FOOTER -->

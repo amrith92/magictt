@@ -137,6 +137,66 @@ body {
 	color: #5E3A00;
 }
 
+.thumbnail {
+	background: rgba(230, 230, 230, 0.6);
+	border: solid 1px #d9d9d9;
+}
+
+.breadcrumb {
+	color: #111;
+}
+
+.breadcrumb a, .breadcrumb a:hover, .breadcrumb a:visited, .breadcrumb a:active {
+	color: #5E3A00;
+}
+
+.breadcrumb a:hover {
+	text-decoration: underline;
+	color: #2E1C00;
+}
+
+.tour-box {
+	clear: both;
+	overflow: hidden;
+}
+
+.tour-box img {
+	width: 100%;
+}
+
+.tour-box h1 {
+	position: absolute;
+	margin-top: -44%;
+	margin-left: 4%;
+	
+	font-size: 4em;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.panel-warning {
+	background: rgba(240, 240, 240, 0.4);
+	border: solid 1px #ddd;
+	color: #2E1C00;
+	
+	border-top-right-radius: 0px;
+	border-top-left-radius: 0px;
+	border-top: none;
+}
+
+.panel-footer {
+	overflow: hidden;
+	clear: both;
+}
+
+.panel-footer .price {
+	font-size: 2em;
+	font-weight: 700;
+}
+
+.panel-footer .btn {
+	vertical-align: middle!important;
+}
+
 @media (min-width: 768px) {
 	.navbar .pull-right {
 		float: right !important;
@@ -146,5 +206,9 @@ body {
 	.get-started {
 		width: 60%;
 		margin: 0 auto;
+	}
+	
+	.tour-box {
+		height: 400px;
 	}
 }

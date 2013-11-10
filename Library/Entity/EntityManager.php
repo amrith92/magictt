@@ -109,4 +109,9 @@ class EntityManager implements EntityManagerInterface
 			throw new \RuntimeException(\sprintf("Entity [%s] could not be resolved.", $entityName));
 		}
 	}
+	
+	public function createNew($entityName, array $args = array())
+	{
+		
+	}
 }

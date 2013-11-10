@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>MagicTT</title>
+    <title>Book <?php echo $tour->getName(); ?> &middot; Tours &middot; MagicTT</title>
 
     <!-- Bootstrap core CSS -->
     <link href="<?php echo UI_PATH; ?>/css/bootstrap.css" rel="stylesheet">
@@ -34,12 +34,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="/"><img src="<?php echo UI_PATH; ?>/img/logo.png" title="Magic Tours and Travels" height="20" /> Magic Tours</a>
+              <a class="navbar-brand" href="#"><img src="<?php echo UI_PATH; ?>/img/logo.png" title="Magic Tours and Travels" height="20" /> Magic Tours</a>
             </div>
             <div class="navbar-collapse collapse">
               <ul class="nav navbar-nav pull-right">
-                <li class="active"><a href="/">Home</a></li>
-                <li><a href="/tour">Packages</a></li>
+                <li><a href="/">Home</a></li>
+                <li class="active"><a href="#about">Packages</a></li>
                 <li><a href="#trendy-package">Trendy Packages</a></li>
                 <li><a href="#popula-packages">Popular packages</a></li>
               </ul>
@@ -49,52 +49,19 @@
 
       </div>
     </div>
-
-		<div class="container">
-		  <div class="jumbotron main-feature">
-		  	<h1>Looking for your next destination?</h1>
-		  	<h2>We&apos;ll find you the <em>right</em> one!</h2>
-			</div>
-		</div>
-		
-		<div class="container">
-			<div class="get-started">
-				<div class="get-started-content">
-					<h3>&raquo; Start Now!</h3>
-					
-					<div class="question-box">
-						<div>
-							How <strike>old</strike> <em>young</em> are you?
-							<input type="number" id="age" min="18">
-						</div>
-					</div>
-					
-					<div class="question-box hidden">
-						<div>
-							Married (<em>almost</em> ;) )?
-							<select id="marital-status">
-								<option value="No">No</option>
-								<option value="Yes">Yes</option>
-							</select>
-						</div>
-					</div>
-					
-					<div class="question-box hidden">
-						<div>
-							Have any rugrats?
-							<select id="kids">
-								<option value="No">No</option>
-								<option value="Yes">Yes</option>
-							</select>
-						</div>
-					</div>
-					
-					<div class="imaginary next-btn">
-						<button class="btn btn-warning" id="next-step" data-step="age"><strong>Next!</strong></button>
-					</div>
-				</div>
-			</div>
-		</div>
+    
+    <div class="container">
+    	<ol class="breadcrumb">
+    		<li><a href="/">Home</a></li>
+    		<li><a href="/tour">Packages</a></li>
+    		<li><a href="/tour/show/<?php echo $tour->getId(); ?>"><?php echo $tour->getName(); ?></a></li>
+    		<li><a href="#">Booking</a></li>
+    	</ol>
+    </div>
+    
+    <div class="container">
+    	
+    </div>
 
       <!-- FOOTER -->
     <div class="container footer-container">
@@ -107,6 +74,5 @@
 
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="<?php echo UI_PATH; ?>/js/bootstrap.min.js"></script>
-    <script data-main="<?php echo UI_PATH; ?>/js/app.js" src="<?php echo UI_PATH; ?>/js/require.js"></script>
   </body>
 </html>
