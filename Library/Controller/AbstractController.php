@@ -8,7 +8,7 @@ use Library\Configurator\Configurator;
 abstract class AbstractController {
 	protected $configuration;
 	
-	protected function __construct() {
+	public function __construct() {
 		$this->configuration = new Configurator;
 	}
 	
@@ -22,6 +22,10 @@ abstract class AbstractController {
 	
 	public function getDatabase() {
 		return $this->configuration->getRegistry()->getService('database');
+	}
+	
+	public function getEmail() {
+		return $this->configuration->getRegistry()->getService('email');
 	}
 	
 	public function getEntityManager() {

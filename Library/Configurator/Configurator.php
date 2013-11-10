@@ -36,7 +36,7 @@ class Configurator
 			return new EntityManager(self::$registry->getService('database'), 'Library\\Model\\Collection\\EntityCollection');
 		});
 		
-		self::registry->addService('email', function() {
+		self::$registry->addService('email', function() {
 			return new Mailer();
 		});
 	}
