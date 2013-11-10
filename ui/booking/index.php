@@ -60,7 +60,42 @@
     </div>
     
     <div class="container">
-    	
+    	<div class="row">
+    		<div class="col-md-12">
+					<div class="media">
+						<a class="pull-left" href="#">
+							<img class="media-object" src="<?php echo $tour->getPicture(); ?>" alt="<?php echo $tour->getName(); ?>" width="64" height="64" />
+						</a>
+						<div class="media-body">
+							<h4 class="media-heading"><?php echo $tour->getName(); ?></h4>
+							
+							<p>
+								<?php echo $tour->getDescription(); ?>
+							</p>
+						</div>
+					</div>
+		  	</div>
+    	</div>
+    	<form role="form">
+    		<div class="form-group">
+    			<label for="_journeyDate">Date of Journey</label>
+    			<input type="date" name="journeyDate" id="_journeyDate" class="form-control" placeholder="DD-MM-YYYY" />
+    		</div>
+    		
+    		<fieldset>
+    			<legend>Ticketing</legend>
+    			<div class="form-group">
+    				<label for="_ticket_name">Name</label>
+    				<input type="text" name="ticket_name[]" id="_ticket_name" class="form-control" />
+    			</div>
+    			<div class="form-group">
+    				<label for="_ticket_dob">Date of Birth</label>
+    				<input type="date" name="ticket_dob[]" id="_ticket_dob" class="form-control" />
+    			</div>
+    		</fieldset>
+    		
+    		<button type="submit" class="btn btn-warning">Book</button>
+    	</form>
     </div>
 
       <!-- FOOTER -->

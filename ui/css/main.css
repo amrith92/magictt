@@ -197,6 +197,16 @@ body {
 	vertical-align: middle!important;
 }
 
+.media {
+	background: rgba(10, 10, 10, 0.4);
+	padding: 4px;
+	margin: 2em 0;
+	
+	-webkit-border-radius: 3px;
+		 -moz-border-radius: 3px;
+					border-radius: 3px;
+}
+
 @media (min-width: 768px) {
 	.navbar .pull-right {
 		float: right !important;
