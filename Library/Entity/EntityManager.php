@@ -49,6 +49,29 @@ class EntityManager implements EntityManagerInterface
 			],
 			'repositoryClass' => 'Library\\Model\\Repository\\TourRepository'
 		]);
+		
+		$this->metadataCollection['Ticket'] = new EntityMetadata([
+			'modelClass' => 'Library\\Model\\Ticket',
+			'mapperClass' => 'Library\\Mapper\\TicketMapper',
+			'repositoryClass' => 'Library\\Model\\Repository\\TicketRepository'
+		]);
+		
+		$this->metadataCollection['User'] = new EntityMetadata([
+			'modelClass' => 'Library\\Model\\User',
+			'mapperClass' => 'Library\\Mapper\\UserMapper',
+			'repositoryClass' => 'Library\\Model\\Repository\\UserRepository'
+		]);
+		
+		$this->metadataCollection['Booking'] = new EntityMetadata([
+			'modelClass' => 'Library\\Model\\Booking',
+			'mapperClass' => 'Library\\Mapper\\BookingMapper',
+			'mapperDependencies' => [
+				'User',
+				'Tour',
+				'Ticket'
+			],
+			'repositoryClass' => 'Library\\Model\\Repository\\BookingRepository'
+		]);
 	}
 	
 	protected function resolveMapperDependency($entityName)
@@ -112,6 +135,22 @@ class EntityManager implements EntityManagerInterface
 	
 	public function createNew($entityName, array $args = array())
 	{
-		
+		if (\array_key_exists($entityName, $this->metadataCollection->toArray())) {
+			$em = $this->metadataCollection[$entityName];
+			
+			$modelClass = $em->getModelClass();
+			
+			try {
+				$reflection = new \ReflectionClass($modelClass);
+				
+				$model = $reflection->newInstance($args);
+			} catch (\Exception $e) {
+				throw new \RuntimeException($e->getMessage());
+			}
+			
+			return $model;
+		} else {
+			throw new \RuntimeException(\sprintf("Entity [%s] could not be resolved.", $entityName));
+		}
 	}
 }

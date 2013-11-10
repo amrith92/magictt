@@ -141,7 +141,7 @@ class User extends AbstractEntity implements UserInterface {
 		$theTime = new \DateTime($last);
 		$errors = \DateTime::getLastErrors();
 		
-		if ($errors['error_count'] > 0 || $errors['warning_error'] > 0) {
+		if ($errors['error_count'] > 0 || $errors['warning_count'] > 0) {
 			throw new \InvalidArgumentException("Invalid Timestamp");
 		}
 		
@@ -154,7 +154,7 @@ class User extends AbstractEntity implements UserInterface {
 		$theTime = new \DateTime($create);
 		$errors = \DateTime::getLastErrors();
 		
-		if ($errors['error_count'] > 0 || $errors['warning_error'] > 0) {
+		if ($errors['error_count'] > 0 || $errors['warning_count'] > 0) {
 			throw new \InvalidArgumentException("Invalid Timestamp");
 		}
 		

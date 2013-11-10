@@ -2,6 +2,7 @@
 
 namespace Library\Model\Repository;
 
+use Library\Mapper\UserMapper;
 use Library\Model\UserInterface;
 
 class UserRepository implements UserRepositoryInterface

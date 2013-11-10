@@ -12,7 +12,6 @@ class UserMapper extends AbstractDataMapper {
 		return new User([
 			'id' => $row['id'],
 			'email' => $row['email'],
-			'username' => $row['username'],
 			'password' => $row['password'],
 			'firstName' => $row['firstName'],
 			'lastName' => $row['lastName'],

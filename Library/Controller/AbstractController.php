@@ -44,5 +44,13 @@ abstract class AbstractController {
 		
 		throw new \Exception("Path ({$path}) not readable/does not exist!");
 	}
+	
+	protected function respond($code, $message) {
+		HttpResponse::setCache(false);
+		HttpResponse::status($code);
+		HttpResponse::setData($message);
+		HttpResponse::send();
+		exit();
+	}
 }
 

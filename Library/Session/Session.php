@@ -5,11 +5,14 @@ namespace Library\Session;
 use \SessionHandlerInterface;
 use Library\Session\Bag\FlashBag;
 use Library\Session\Bag\DirtyFormBag;
+use Library\Session\Bag\ObjectBag;
 
 class Session implements SessionInterface {
 	protected $flashBag;
 	
 	protected $dirtyFormBag;
+	
+	protected $objectBag;
 
 	public function __construct(SessionHandlerInterface $handler, $mode = 'files') {
 		\ini_set('session.save_handler', $mode);
@@ -18,6 +21,7 @@ class Session implements SessionInterface {
 		
 		$this->flashBag = new FlashBag();
 		$this->dirtyFormBag = new DirtyFormBag();
+		$this->objectBag = new ObjectBag();
 	}
 	
 	public function start() {
@@ -58,6 +62,10 @@ class Session implements SessionInterface {
 	
 	public function getDirtyFormBag() {
 		return $this->dirtyFormBag;
+	}
+	
+	public function getObjectBag() {
+		return $this->objectBag;
 	}
 	
 	public function offsetExists($offset) {
@@ -101,7 +109,17 @@ class Session implements SessionInterface {
 	}
 	
 	public function isLoggedIn() {
-		return isset($_SESSION['logged_in']);
+		return isset($_SESSION['userId']);
+	}
+	
+	public function getUserId() {
+		return $_SESSION['userId'];
+	}
+	
+	public function setUserId($id) {
+		$_SESSION['userId'] = $id;
+		
+		return $this;
 	}
 }
 

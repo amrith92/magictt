@@ -27,6 +27,37 @@ define(['../ajaxresponder'], function(ajax) {
 			return is_valid;
 		},
 		
+		date: function(str, format) {
+			if (format == undefined) {
+				format = "d-m-Y";
+			}
+			
+			var data = format.split('-');
+			var pieces = str.split('-');
+			
+			var day, month, year;
+			
+			for (var i = 0; i < pieces.length; ++i) {
+				if ('d' == data[i]) {
+					day = pieces[i];
+				}
+				
+				if ('m' == data[i]) {
+					month = pieces[i];
+				}
+				
+				if ('Y' == data[i]) {
+					year = pieces[i];
+				}
+			}
+			
+			console.log(format + ": " + day + "-" + month + "-" + year);
+				
+			var date = new Date(year, month, day);
+			
+			return isNaN(date.getTime()) ? false : true;
+		},
+		
 		name: function(str) {
 			return /^[A-Za-z \-]+$/.test(str);
 		},
