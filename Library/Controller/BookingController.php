@@ -52,34 +52,40 @@ class BookingController extends AbstractController
 			}
 			
 			$session->getObjectBag()->add('booking', $booking);
-			$this->renderView('booking/confirm.php',\compact());
+			
+			$this->renderView('booking/confirm.php', \compact('booking'));
 		} catch (\Exception $e) {
-			echo $e->getMessage();
+			$this->respond(503, $e->getMessage());
 		}	
 	}
 	
 	public function confirm() {
 		$session = $this->getSession();
 		$booking = $session->getObjectBag()->get('booking');
+		
 		$bookingRepo = $this->getEntityManager()->getRepository('Booking');
 		$bookingRepo->save($booking);
-		$user = $this->getEntityManager()->getRepository('User')->find($session->getUserId());
+		
+		$user = $booking->getUser();
 		$tour = $booking->getTour();
+		
 		$email = $this->getEmail();
 		$email->addRecipient($user->getFullName(), $user->getEmail());
 		$email->setFrom("MagicTT", "info@magictt.com");
-		$subject = "Booking Confirmation";
-		$email->fillSubject($subject);
-		$message = "<html><body>";
-		$message .= "<p>Hi <b>".$user->getFullName()."</b>, </p>";
-		$message .= "<p> Congratulations you have successfully booked for the tour. Below are the details of the tour: </p>";
-		$message .= "Booking id: ". $booking->getId() . " <br/>";
-		$message .= "Tour Name: ". $tour->getName() . "<br/>";
-		$message .= "Journey Date : ". $booking->getJourneyDate() . "<br/>";
-		$message .= "Tickets : ". $booking->getTickets() . "<br/>";
+		$email->fillSubject("Booking Confirmation");
+		
+		$message = "<!DOCTYPE html><html lang='en-GB'><body>";
+		$message .= "<p>Hi <b>".$user->getFullName()."</b>,</p>";
+		$message .= "<p>Congratulations you have successfully booked for the tour. Below are the details of the tour: </p><ul>";
+		$message .= "<li><strong>Booking id:</strong> ". $booking->getId() . "</li>";
+		$message .= "<li><strong>Tour Name:</strong> ". $tour->getName() . "</li>";
+		$message .= "<li><strong>Journey Date:</strong> ". $booking->getJourneyDate()->format('l d F, Y') . "</li>";
+		$message .= "</ul>";
 		$message .= "</body></html>";
+		
 		$email->fillMessage($message);
 		$email->send();
-		$this->renderView("payment/pay.php",$booking);
+		
+		$this->renderView("payment/pay.php", $booking);
 	}
 }
