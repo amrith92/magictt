@@ -79,7 +79,7 @@ abstract class AbstractDataMapper implements DataMapperInterface
 				if($comma) {
 					$values .= ',';
 				}
-				$values .= "`$key` = $v";
+				$values .= "`$key` = '$v'";
 				$comma = true;	
 			}
 		} else {
@@ -110,9 +110,16 @@ abstract class AbstractDataMapper implements DataMapperInterface
 	}
 
 	public function save(EntityInterface $entity) {
-		return !isset($entity->id)
-			? $this->db->insert($this->table, $entity)
-			: $this->db->update($this->table, $entity);
+		!isset($entity->id)
+			? $this->db->insert($this->table, $entity->toArray())
+			: $this->db->update($this->table, $entity->toArray());
+		
+		$lastInsertId = $this->db->getLastInsertId();
+		
+		if (0 != $lastInsertId) {
+			$fn = 'set' . \ucfirst($this->pkey);
+			$entity->$fn($lastInsertId);
+		}
 	}
 
 	public function update(EntityInterface $entity) {

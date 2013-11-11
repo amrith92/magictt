@@ -18,7 +18,7 @@ class UserRepository implements UserRepositoryInterface
 	}
 	
 	public function findByEmail($email) {
-		return $this->userMapper->findAll(['email' => $email]);
+		return $this->userMapper->findAll(['email' => $email])[0];
 	}
 	
 	public function findByFirstName($firstName) {

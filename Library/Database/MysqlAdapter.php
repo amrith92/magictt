@@ -42,13 +42,19 @@ class MysqlAdapter implements DatabaseAdapterInterface {
 		
 		$result_array = null;
 		
-		while($row = $result->fetch_assoc()) {
-			$result_array[] = $row;
+		if (\is_object($result)) {
+			while($row = $result->fetch_assoc()) {
+				$result_array[] = $row;
+			}
+	
+			$result->free();
 		}
 		
-		$result->free();
-		
 		return $result_array;
+	}
+	
+	public function getLastInsertId() {
+		return $this->conn->insert_id;
 	}
 
 	public function select($table, array $fields = [], $where = '1') {
@@ -64,7 +70,7 @@ class MysqlAdapter implements DatabaseAdapterInterface {
 	}
 
 	public function insert($table, array $fields) {
-		$sql = "INSERT INTO `" . $table . "`(" . \implode(', ',\array_keys($fields)) . " ) VALUES (" . \implode(', ', \array_values($fields)) . " )";
+		$sql = "INSERT INTO `" . $table . "`(" . \implode(', ',\array_keys($fields)) . " ) VALUES ('" . \implode("','", \array_values($fields)) . "' )";
 		
 		return $this->execute($sql);
 	}

@@ -72,6 +72,6 @@ class RegistrationController extends AbstractController {
 		$email->fillMessage($message);
 		$email->send();
 		
-		$this->renderView("registration/thankyou.php", \compact('user'));
+		$this->renderView("registration/thankyou.php");
 	}
 }

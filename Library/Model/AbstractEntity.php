@@ -35,7 +35,15 @@ abstract class AbstractEntity implements EntityInterface {
 	}
 	
 	public function toArray() {
-		return $this->fields;
+		foreach ($this->fields as $k => $v) {
+			if ($v instanceof \DateTime) {
+				$arr[$k] = $v->format('Y-m-d');
+			} else {
+				$arr[$k] = $v;
+			}
+		}
+		
+		return $arr;
 	}
 	
 	public function __set($name, $value) {

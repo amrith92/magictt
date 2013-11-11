@@ -1,3 +1,6 @@
+<?php
+	$tour = $booking->getTour();
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Book <?php echo $tour->getName(); ?> &middot; Tours &middot; MagicTT</title>
+    <title>Enjoy! &middot; Book <?php echo $tour->getName(); ?> &middot; Tours &middot; MagicTT</title>
 
     <!-- Bootstrap core CSS -->
     <link href="<?php echo UI_PATH; ?>/css/bootstrap.css" rel="stylesheet">
@@ -34,7 +37,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="/">Magic Tours</a>
+              <a class="navbar-brand" href="#">Magic Tours</a>
             </div>
             <div class="navbar-collapse collapse">
               <ul class="nav navbar-nav">
@@ -62,25 +65,12 @@
     </div>
     
     <div class="container">
-			<?php
-				foreach ($flashes as $k => $flash) {
-			?>
-			<div class="alert alert-<?php echo $k; ?> alert-dismissable">
-				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-			
-				<?php echo $flash; ?>
-			</div>
-			<?php
-				}
-			?>
-    </div>
-    
-    <div class="container">
     	<ol class="breadcrumb">
     		<li><a href="/">Home</a></li>
     		<li><a href="/tour">Packages</a></li>
     		<li><a href="/tour/show/<?php echo $tour->getId(); ?>"><?php echo $tour->getName(); ?></a></li>
-    		<li><a href="#">Booking</a></li>
+    		<li><a href="/booking/tour/<?php echo $tour->getId(); ?>">Booking</a></li>
+    		<li><a href="#">Thank You!</a></li>
     	</ol>
     </div>
     
@@ -101,43 +91,24 @@
 					</div>
 		  	</div>
     	</div>
-    	<form role="form" class="booking-form" action="/booking/process" method="POST">
-    		<input type="hidden" name="tourId" value="<?php echo $tour->getId(); ?>">
-    		<div class="form-group">
-    			<label for="_journeyDate">When do you want to go?</label>
-    			<input type="date" name="journeyDate" id="_journeyDate" class="form-control" placeholder="DD-MM-YYYY" />
+    	
+    	<div class="row">
+    		<div class="col-md-12 auth-feature">
+					<h1>Thank you!</h1>
+				
+					<p>
+						We&apos;ve successfully confirmed your booking. Please
+						check your email for further details.
+					</p>
+				
+					<p>
+						Enjoy! :)
+					</p>
+				
+					<a class="btn btn-primary" role="button" href="/">Back to Home</a>
     		</div>
-    		
-    		<fieldset>
-    			<legend>Ticketing</legend>
-    			<div id="tickets">
-						<div class="row">
-							<div class="col-xs-4">
-								<label for="_ticket_name">Full Name</label>
-								<input type="text" name="ticket_name[]" id="_ticket_name" class="form-control" placeholder="Full Name" />
-							</div>
-							<div class="col-xs-3">
-								<label for="_ticket_dob">Date Of Birth</label>
-								<input type="date" name="ticket_dob[]" id="_ticket_dob" class="form-control" placeholder="Date Of Birth (DD-MM-YYYY)" />
-							</div>
-							<div class="col-xs-4">
-								<label for="_ticket_gender">Gender</label>
-								<select class="form-control" name="ticket_gender[]" id="_ticket_gender">
-									<option value="Female">Female</option>
-									<option value="Male">Male</option>
-								</select>
-							</div>
-							<div class="col-xs-1">
-								<a class="btn btn-primary" id="add-button" role="button" href="#add">+</a>
-							</div>
-						</div>
-    			</div>
-    		</fieldset>
-	    	
-	    	<br />
-	    	<button type="submit" class="btn btn-warning">Book</button>
-    	</form>
-    </div>
+    	</div>
+  	</div>
 
       <!-- FOOTER -->
     <div class="container footer-container">

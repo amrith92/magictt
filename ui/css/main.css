@@ -22,16 +22,19 @@ body {
 	margin-top: 2em;
 }
 
-.navbar-brand img {
-	vertical-align: text-top;
-}
-
 .navbar .pull-right {
 	float: none !important;
 }
 
 .footer-container {
 	margin: 6em auto 0;
+}
+
+.footer-container img {
+	margin: 0 auto;
+	display: block;
+	vertical-align: middle;
+	height: 100px;
 }
 
 .main-feature {
@@ -226,6 +229,34 @@ body {
 
 #add-button {
 	margin-top: 1.8em;
+}
+
+.booking-view h3 {
+	color: #fcfcfc;
+	
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+table.tickets {
+	background: #fff;
+	color: #333;
+	
+	-webkit-border-radius: 3px;
+		 -moz-border-radius: 3px;
+					border-radius: 3px;
+}
+
+.auth-feature {
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.auth-box {
+	background: rgba(10, 10, 10, 0.4);
+	padding: 10px;
+
+	-webkit-border-radius: 3px;
+		 -moz-border-radius: 3px;
+					border-radius: 3px;
 }
 
 @media (min-width: 768px) {

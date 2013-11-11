@@ -71,7 +71,7 @@ abstract class AbstractBag implements SessionBagInterface
 	}
 	
 	public function clear() {
-		unset($this->bag);
+		$this->bag = array();
 	}
 	
 	public function has($item) {

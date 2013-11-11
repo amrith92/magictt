@@ -17,5 +17,7 @@ interface DatabaseAdapterInterface {
 	public function update($table, array $value, $where = '');
 
 	public function delete($table, $where = '');
+	
+	public function getLastInsertId();
 }
 

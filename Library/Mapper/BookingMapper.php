@@ -3,6 +3,9 @@
 namespace Library\Mapper;
 
 use Library\Database\DatabaseAdapterInterface;
+use Library\Model\EntityInterface;
+use Library\Model\UserInterface;
+use Library\Model\TourInterface;
 use Library\Model\Booking;
 
 class BookingMapper extends AbstractDataMapper
@@ -39,5 +42,30 @@ class BookingMapper extends AbstractDataMapper
 		$tickets = $this->ticketMapper->findInCollection($ticketIds);
 			
 		return $booking->setTickets($tickets);
+	}
+	
+	public function save(EntityInterface $entity) {
+		$values = $entity->toArray();
+		
+		foreach ($values as $k => $value) {
+			if ($value instanceof UserInterface) {
+				$values[$k] = $value->getId();
+			}
+			
+			if ($value instanceof TourInterface) {
+				$values[$k] = $value->getId();
+			}
+		}
+		
+		!isset($entity->id)
+			? $this->db->insert($this->table, $values)
+			: $this->db->update($this->table, $values);
+		
+		$lastInsertId = $this->db->getLastInsertId();
+		
+		if (0 != $lastInsertId) {
+			$fn = 'set' . \ucfirst($this->pkey);
+			$entity->$fn($lastInsertId);
+		}
 	}
 }

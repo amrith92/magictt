@@ -2,11 +2,12 @@
 
 namespace Library\Controller;
 
+use Library\Model\Collection\EntityCollection;
+
 class BookingController extends AbstractController
 {
 	public function __construct() {
 		parent::__construct();
-		$this->getSession()->setUserId('1'); // TESTING
 	}
 	
 	public function tour($id)
@@ -40,6 +41,19 @@ class BookingController extends AbstractController
 			
 			for ($i = 0, $term = \count($_POST['ticket_dob']); $i < $term; ++$i) {
 				$data[$i]['dateOfBirth'] = \DateTime::createFromFormat('d-m-Y', \filter_var($_POST['ticket_dob'][$i], FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+				
+				$now = new \DateTime();
+				$diff = $now->diff($data[$i]['dateOfBirth']);
+				
+				if ($diff->y < 6) {
+					$discount = $tour->getPrice() * 0.2;
+				} else if ($diff->y > 60) {
+					$discount = $tour->getPrice() * 0.1;
+				} else {
+					$discount = 0;
+				}
+				
+				$data[$i]['payable'] = $tour->getPrice() - $discount;
 			}
 			
 			for ($i = 0, $term = \count($_POST['ticket_gender']); $i < $term; ++$i) {
@@ -48,8 +62,10 @@ class BookingController extends AbstractController
 			
 			foreach ($data as $row) {
 				$ticket = $this->getEntityManager()->createNew('Ticket', $row);
-				$booking->addTicket($ticket);
+				$tickets[] = $ticket;
 			}
+			
+			$booking->setTickets(new EntityCollection($tickets));
 			
 			$session->getObjectBag()->add('booking', $booking);
 			
@@ -62,9 +78,9 @@ class BookingController extends AbstractController
 	public function confirm() {
 		$session = $this->getSession();
 		$booking = $session->getObjectBag()->get('booking');
+		$booking->setStatus('Confirmed');
 		
-		$bookingRepo = $this->getEntityManager()->getRepository('Booking');
-		$bookingRepo->save($booking);
+		//$this->getEntityManager()->getRepository('Booking')->save($booking);
 		
 		$user = $booking->getUser();
 		$tour = $booking->getTour();
@@ -77,15 +93,37 @@ class BookingController extends AbstractController
 		$message = "<!DOCTYPE html><html lang='en-GB'><body>";
 		$message .= "<p>Hi <b>".$user->getFullName()."</b>,</p>";
 		$message .= "<p>Congratulations you have successfully booked for the tour. Below are the details of the tour: </p><ul>";
-		$message .= "<li><strong>Booking id:</strong> ". $booking->getId() . "</li>";
+		$message .= "<li><strong>Booking id:</strong> MTT0000". $booking->getId() . "</li>";
 		$message .= "<li><strong>Tour Name:</strong> ". $tour->getName() . "</li>";
-		$message .= "<li><strong>Journey Date:</strong> ". $booking->getJourneyDate()->format('l d F, Y') . "</li>";
+		$message .= "<li><strong>Journey Date:</strong> ". $booking->getJourneyDate()->format('F d, Y') . "</li>";
 		$message .= "</ul>";
+		$message .= '<table cellpadding="4" border="1">';
+		$message .= '<thead><tr><th>Name</th><th>Date Of Birth</th><th>Gender</th><th>Amount (₹)</th></tr></thead><tbody>';
+		
+		$tickets = $booking->getTickets();
+		for ($i = 0, $term = \count($tickets); $i < $term; ++$i) {
+			$message .= '<tr>';
+			$message .= "<td>{$tickets[$i]->getName()}</td><td>{$tickets[$i]->getDateOfBirth()->format('F dS, Y')}</td><td>{$tickets[$i]->getGender()}</td><td>{$tickets[$i]->getPayable()}</td>";
+			$message .= '</tr>';
+		}
+		
+		$message .= '</tbody></table>';
 		$message .= "</body></html>";
 		
 		$email->fillMessage($message);
 		$email->send();
 		
-		$this->renderView("payment/pay.php", $booking);
+		$this->renderView("booking/thankyou.php", \compact('booking'));
+	}
+	
+	public function cancel() {
+		$session = $this->getSession();
+		
+		if (!$session->getObjectBag()->has('booking')) {
+			$this->respond(400, "You're not supposed to be here.");
+		}
+		
+		$session->getObjectBag()->remove('booking');
+		$this->forward('/');
 	}
 }

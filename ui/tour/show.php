@@ -34,15 +34,26 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="#"><img src="<?php echo UI_PATH; ?>/img/logo.png" title="Magic Tours and Travels" height="20" /> Magic Tours</a>
+              <a class="navbar-brand" href="/">Magic Tours</a>
             </div>
             <div class="navbar-collapse collapse">
-              <ul class="nav navbar-nav pull-right">
-                <li><a href="/">Home</a></li>
-                <li class="active"><a href="#about">Packages</a></li>
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="/tour/show/<?php echo $tour->getId(); ?>">Packages</a></li>
                 <li><a href="#trendy-package">Trendy Packages</a></li>
                 <li><a href="#popula-packages">Popular packages</a></li>
               </ul>
+              <?php if ($session->isLoggedIn()) { ?>
+              <ul class="nav navbar-nav pull-right">
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $user->getFullName(); ?> <b class="caret"></b></a>
+									<ul class="dropdown-menu">
+										<li><a href="#">History</a></li>
+										<li class="divider"></li>
+										<li><a href="/auth/logout">Logout</a></li>
+									</ul>
+								</li>
+							</ul>
+							<?php } ?>
             </div>
           </div>
         </div>
@@ -83,8 +94,8 @@
 							</p>
 		  			</div>
 		  			<div class="panel-footer">
-		  				<span class="price">Rs. <?php echo \sprintf("%d", $tour->getPrice()); ?></span>
-		  				<a href="/booking/tour/<?php echo $tour->getId(); ?>" class="btn btn-danger pull-right" role="button">Book Now</a>
+		  				<span class="price">Rs. <?php echo \sprintf("%d", $tour->getPrice()); ?>/person.</span> <small>Younger children and Senior citizens can enjoy discounted prices.</small>
+		  				<a href="/auth/book/<?php echo $tour->getId(); ?>" class="btn btn-danger pull-right" role="button">Book Now</a>
 		  			</div>
     			</div>
     		</div>
@@ -94,8 +105,17 @@
       <!-- FOOTER -->
     <div class="container footer-container">
       <footer>
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; <?php echo date('Y'); ?> MagicTT, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+      	<div class="row">
+        	<div class="col-md-3">
+        		<p>&copy; <?php echo date('Y'); ?> MagicTT, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+      		</div>
+      		<div class="col-md-6">
+      			<img src="<?php echo UI_PATH; ?>/img/logo.png" title="Magic Tours and Travels" />
+      		</div>
+      		<div class="col-md-3">
+        		<p class="pull-right"><a href="#">Back to top</a></p>
+        	</div>
+    		</div>
       </footer>
 
     </div><!-- /.container -->

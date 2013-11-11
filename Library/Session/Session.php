@@ -19,6 +19,8 @@ class Session implements SessionInterface {
 		
 		\session_set_save_handler($handler, true);
 		
+		$this->start();
+		
 		$this->flashBag = new FlashBag();
 		$this->dirtyFormBag = new DirtyFormBag();
 		$this->objectBag = new ObjectBag();
@@ -34,6 +36,11 @@ class Session implements SessionInterface {
 		if (\session_status() == PHP_SESSION_ACTIVE) {
 			\session_destroy();
 		}
+	}
+	
+	public function reset() {
+		$this->clear();
+		\session_regenerate_id();
 	}
 	
 	public function clear() {
@@ -56,15 +63,15 @@ class Session implements SessionInterface {
 		return null;
 	}
 	
-	public function getFlashBag() {
+	public function &getFlashBag() {
 		return $this->flashBag;
 	}
 	
-	public function getDirtyFormBag() {
+	public function &getDirtyFormBag() {
 		return $this->dirtyFormBag;
 	}
 	
-	public function getObjectBag() {
+	public function &getObjectBag() {
 		return $this->objectBag;
 	}
 	

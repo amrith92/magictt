@@ -10,6 +10,8 @@ interface SessionInterface extends \ArrayAccess, \Iterator
 	
 	public function clear();
 	
+	public function reset();
+	
 	public function getFlashBag();
 	
 	public function getDirtyFormBag();

@@ -40,8 +40,14 @@ abstract class AbstractController {
 			HttpResponse::setHeader('X-Served-By', 'Treebeard, Ent Lord');
 			HttpResponse::capture();
 			
+			$session = $this->getSession();
+			$flashes = $session->getFlashBag();
+			$user = $session->getObjectBag()->get('user');
+			
 			\extract($params);
 			include_once $path;
+			
+			$flashes->clear();
 			
 			exit();
 		}
@@ -54,6 +60,11 @@ abstract class AbstractController {
 		HttpResponse::status($code);
 		HttpResponse::setData($message);
 		HttpResponse::send();
+		exit();
+	}
+	
+	protected function forward($path) {
+		\HttpResponse::redirect(BASE_PATH . $path);
 		exit();
 	}
 }

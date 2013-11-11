@@ -17,7 +17,7 @@ class Booking extends AbstractEntity implements BookingInterface
 	protected $tickets;
 	
 	public function setId($id) {
-		if (!isset($this->fields['id'])) {
+		if (isset($this->fields['id'])) {
 			throw new \InvalidArgumentException("ID is already set.");
 		}
 		
@@ -132,7 +132,7 @@ class Booking extends AbstractEntity implements BookingInterface
 	
 	public function addTicket(TicketInterface $ticket) {
 		foreach ($this->tickets as $t) {
-			if ($t->getId() == $ticket->getId()) {
+			if (null != $ticket->getId() && $t->getId() == $ticket->getId()) {
 				throw new \BadMethodCallException("Ticket already associated with this booking.");
 			}
 		}
